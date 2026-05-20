@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Якісний склад педагогічних працівників</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<style>
+:root{
+  --paper:#f5efde; --paper2:#ece4cc;
+  --blue:#1d4ed8;
+  --blue-deep:#16357a;
+  --blue-soft:#e8eefb;
+  --green:#15803d;
+  --green-bright:#22c55e;
+  --cyan:#0891b2;
+  --amber:#e0922e;
+  --white:#ffffff;
+  --surface:#ffffff;
+  --text:#16357a;
+  --line:#cbd9ec;
+  --ok-bg:#dcfce7;
+  --err-bg:#fdeaea;
+  --err:#b91c1c;
+  --font:"Times New Roman", Times, Georgia, serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--font);
+  font-size:16px;
+  color:var(--text);
+  background:radial-gradient(1200px 600px at 80% -10%, var(--paper2) 0%, var(--paper) 45%, var(--paper) 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+}
+
+/* ── Хедер ── */
+header{background:var(--white);border-bottom:1px solid var(--line)}
+.header-inner{max-width:1340px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-name{font-size:18px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;line-height:1.2}
+
+.tabs{display:flex;gap:4px;padding:3px;background:var(--blue-soft);border-radius:9px}
+.tab{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;cursor:pointer;border-radius:6px;font-size:16px;font-weight:700;background:transparent;color:var(--text);font-family:var(--font);transition:all .15s}
+.tab.active{background:var(--blue);color:var(--white)}
+.tab .badge{font-size:15px;font-weight:700;opacity:.85;margin-left:3px}
+
+.poster{max-width:1340px;margin:0 auto;padding:18px 24px 14px}
+.poster h1{font-weight:700;font-size:clamp(22px,3vw,32px);line-height:1.15;margin:0}
+.poster h1 .hl{color:var(--green)}
+
+/* ── Контент ── */
+main{max-width:1340px;margin:0 auto;padding:0 24px 64px}
+.section-divider{display:flex;align-items:center;justify-content:flex-end;border-top:2px solid var(--blue);padding-top:10px;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.section-label{font-size:14px;letter-spacing:.03em;text-transform:uppercase;font-weight:700;opacity:.78}
+
+/* ── Форма ── */
+.form-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
+@media(max-width:1040px){.form-grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:11px}
+
+.form-section{padding:14px 17px}
+.form-section + .form-section{border-top:1px solid var(--line)}
+.form-section-head{display:flex;align-items:center;gap:9px;margin-bottom:11px}
+.form-section-num{width:25px;height:25px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--blue);color:var(--white);border-radius:5px;font-size:15px;font-weight:700}
+.form-section h2{font-size:18px;font-weight:700;margin:0}
+.form-section .sub{font-size:13px;font-weight:600;opacity:.65;margin-left:auto}
+
+.field-label{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;margin-bottom:5px;opacity:.85}
+.id-grid{display:grid;grid-template-columns:1fr 190px;gap:12px}
+@media(max-width:540px){.id-grid{grid-template-columns:1fr}}
+.three-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+
+select,input[type="number"]{
+  font-family:var(--font);font-size:16px;font-weight:600;
+  width:100%;padding:8px 11px;
+  border:1.5px solid var(--line);background:var(--white);
+  color:var(--text);border-radius:7px;outline:none;
+}
+select{
+  cursor:pointer;appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%2316357a' stroke-width='1.6' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 11px center;padding-right:32px;
+}
+select:focus,input:focus{border-color:var(--blue)}
+input.invalid,select.invalid{border-color:var(--err);background:#fff6f6}
+.field-msg{font-size:13px;font-weight:700;color:var(--err);margin-top:3px;display:none}
+.field-msg.show{display:block}
+
+/* категорійні вкладки */
+.cat-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:13px}
+.cat-tab{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border:1.5px solid var(--line);background:var(--white);
+  border-radius:8px;cursor:pointer;font-family:var(--font);font-size:14.5px;font-weight:700;color:var(--text);transition:all .14s}
+.cat-tab.active{background:var(--blue);color:var(--white);border-color:var(--blue)}
+.cat-tab .ct-check{width:17px;height:17px;border-radius:50%;border:1.6px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;opacity:.5}
+.cat-tab .ct-check.done{background:var(--green-bright);border-color:var(--green-bright);color:#fff;opacity:1}
+.cat-tab.invalid{border-color:var(--err)}
+.cat-panel{display:none}
+.cat-panel.active{display:block}
+.cat-hint{font-size:13px;font-weight:600;opacity:.65;margin:0 0 11px}
+
+/* підгрупа всередині категорії */
+.subgroup-title{font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:800;color:var(--blue);padding-left:9px;border-left:3px solid var(--blue);margin:14px 0 9px;display:flex;align-items:center;gap:8px}
+.numrow{display:grid;grid-template-columns:1fr 110px 88px;gap:11px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+.numrow:last-of-type{border-bottom:none}
+.numrow .lbl{font-size:15px;font-weight:700;line-height:1.25}
+.numrow input{font-size:16px;font-weight:700;text-align:right;padding:7px 10px}
+.numrow .pct{text-align:right;font-size:15px;font-weight:700;color:var(--green)}
+.numrow .pct.empty{opacity:.4;font-weight:600}
+.numrow.total-line{border-bottom:2px solid var(--blue);padding-bottom:9px}
+.numrow.total-line .lbl{color:var(--blue);font-weight:800}
+@media(max-width:600px){
+  .numrow{grid-template-columns:1fr 1fr}
+  .numrow .lbl{grid-column:1/-1}
+}
+.grp-check{display:flex;justify-content:flex-end;gap:8px;align-items:center;margin-top:9px;font-size:13px;font-weight:700}
+.grp-badge{font-size:12px;font-weight:700;padding:2px 9px;border-radius:6px}
+.grp-badge.ok{background:var(--ok-bg);color:var(--green)}
+.grp-badge.bad{background:var(--err-bg);color:var(--err)}
+
+/* ── Підсумок перевірки ── */
+.valid-summary{margin:11px 17px 0;padding:10px 13px;border-radius:8px;font-size:14px;font-weight:700;display:none}
+.valid-summary.show{display:block}
+.valid-summary.err{background:var(--err-bg);border:1px solid #f0bcbc;color:var(--err)}
+.valid-summary.ok{background:var(--ok-bg);border:1px solid #a7d8b5;color:var(--green)}
+.valid-summary .vs-head{display:flex;align-items:center;gap:6px}
+.valid-summary ul{margin:5px 0 0;padding-left:18px;font-weight:600}
+.valid-summary li{margin:2px 0}
+
+/* ── Бічна панель ── */
+.sidecard-wrap{position:sticky;top:14px}
+.sidecard{background:var(--white);border:1px solid var(--line);color:var(--text);border-radius:11px;padding:17px;box-shadow:0 18px 36px -22px rgba(13,35,64,.3)}
+.sidecard-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sidecard-head .ttl{font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;opacity:.78}
+.sidecard-head .live{font-size:12px;font-weight:700;color:var(--green)}
+.live-dot{display:inline-block;width:6px;height:6px;background:var(--green-bright);border-radius:50%;margin-right:4px;animation:pulse 1.5s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.kpi-mini-lbl{font-size:13px;letter-spacing:.03em;text-transform:uppercase;font-weight:700;opacity:.82;margin-bottom:1px}
+.kpi-mini-val{font-size:42px;font-weight:700;line-height:1.05;color:var(--blue)}
+.kpi-mini-sub{font-size:13px;font-weight:600;opacity:.7;margin-top:1px}
+.dash{border:none;border-top:1px solid var(--line);margin:12px 0}
+.side-sub{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;opacity:.7;margin-bottom:8px}
+.cat-status{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px dashed var(--line);font-size:14px;font-weight:700}
+.cat-status:last-child{border-bottom:none}
+.cs-badge{font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px}
+.cs-badge.ok{background:var(--ok-bg);color:var(--green)}
+.cs-badge.bad{background:var(--err-bg);color:var(--err)}
+.note{font-size:13px;opacity:.68;margin-top:11px;line-height:1.5;font-weight:500}
+
+/* ── Кнопки ── */
+.actions{display:flex;gap:8px;padding:12px 17px;border-top:1px solid var(--line);align-items:center;flex-wrap:wrap}
+.btn{font-family:var(--font);font-size:16px;font-weight:700;display:inline-flex;align-items:center;gap:6px;padding:9px 17px;border:none;border-radius:7px;cursor:pointer;transition:transform .12s,filter .12s}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn.primary{background:var(--blue);color:var(--white)}
+.btn.secondary{background:var(--white);color:var(--blue);border:1.5px solid var(--blue)}
+.btn.ghost{background:transparent;color:var(--blue);text-decoration:underline;text-underline-offset:3px;padding:9px 7px}
+.btn.green{background:var(--green);color:var(--white)}
+
+.toast{font-size:14px;font-weight:700;padding:8px 12px;border-radius:7px;display:inline-flex;align-items:center;gap:6px}
+.toast.ok{background:var(--ok-bg);color:var(--green)}
+.toast.err{background:var(--err-bg);color:var(--err)}
+
+/* ── KPI картки ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--blue);padding:14px 16px;border-radius:9px}
+.kpi.green{border-left-color:var(--green)}
+.kpi.cyan{border-left-color:var(--cyan)}
+.kpi.amber{border-left-color:var(--amber)}
+.kpi-head{display:flex;align-items:center;gap:6px;margin-bottom:7px;font-size:13px;letter-spacing:.02em;text-transform:uppercase;font-weight:700;opacity:.85;line-height:1.25}
+.kpi-val{font-size:32px;font-weight:700;line-height:1.05}
+.kpi-sub{font-size:13px;font-weight:600;opacity:.68;margin-top:4px}
+
+/* секція категорії у результатах */
+.cat-section{margin-bottom:26px}
+.cat-section-head{display:flex;align-items:center;gap:10px;margin:0 0 13px}
+.cat-section-head .cs-num{width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--blue);color:#fff;border-radius:7px;font-size:15px;font-weight:800}
+.cat-section-head h2{font-size:22px;font-weight:700;margin:0}
+.cat-section-head .cs-line{flex:1;height:2px;background:var(--blue)}
+
+/* ── Картки графіків ── */
+.chart-card{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:17px;margin-bottom:16px}
+.chart-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
+.chart-head h3{font-size:19px;font-weight:700;margin:0}
+.chart-head h3 .hl{color:var(--green)}
+.chart-fig{font-size:13px;font-weight:700;opacity:.55}
+.chart-desc{font-size:15px;opacity:.72;margin:0 0 15px;font-weight:500;max-width:760px}
+.chart-canvas{position:relative;height:400px}
+.chart-card.pie .chart-canvas{height:310px}
+
+.legend-list{margin-top:10px}
+.legend-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px dashed var(--line)}
+.legend-item:last-child{border-bottom:none}
+.legend-item .l{font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
+.legend-swatch{width:12px;height:12px;display:inline-block;border-radius:3px;flex-shrink:0}
+.legend-item .v{font-size:14px;font-weight:700;white-space:nowrap}
+.legend-item .v .p{opacity:.65;font-weight:600}
+
+/* ── Таблиця ── */
+.table-toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.table-toolbar h3{font-size:18px;font-weight:700;margin:0}
+.table-toolbar h3 .hl{color:var(--green)}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);background:var(--surface);border-radius:9px}
+table.zv{width:100%;border-collapse:collapse;font-size:15px}
+table.zv thead tr.r1{background:var(--blue-deep);color:var(--white)}
+table.zv thead tr.r2{background:var(--blue);color:var(--white)}
+table.zv th{padding:8px 6px;font-size:12px;font-weight:700;letter-spacing:.01em;text-transform:uppercase;border-right:1px solid rgba(255,255,255,.18);line-height:1.2}
+table.zv td{padding:8px 6px;font-size:15px;font-weight:600;border-right:1px solid var(--line);border-top:1px solid var(--line);text-align:center;vertical-align:middle}
+table.zv td.left{text-align:left;min-width:200px}
+table.zv td.bold{font-weight:700}
+table.zv td.green-c{color:var(--green)}
+table.zv tr.row-even{background:var(--blue-soft)}
+table.zv tr.total-row td{border-top:2px solid var(--blue);background:#dbe8fb;font-weight:700}
+
+.section-toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.table-yearpick{display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:5px 8px 5px 12px}
+.table-yearpick label{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;opacity:.82}
+.table-yearpick select{width:auto;padding:6px 28px 6px 10px;font-size:15px;border-width:1px}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--err);padding:2px}
+
+/* ── Empty ── */
+.empty{text-align:center;padding:56px 28px;border:1.5px dashed var(--line);border-radius:11px;background:var(--surface)}
+.empty h3{font-size:22px;font-weight:700;margin:8px 0 5px}
+.empty p{opacity:.72;font-size:16px;margin-bottom:16px;font-weight:500}
+
+/* ── Підвал ── */
+footer{border-top:1px solid var(--line);background:var(--white)}
+.footer-inner{max-width:1340px;margin:0 auto;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:9px;font-size:13px;font-weight:600;opacity:.72;letter-spacing:.02em}
+
+.hidden{display:none!important}
+.icon{width:15px;height:15px;flex-shrink:0}
+.icon-lg{width:17px;height:17px}
+.icon-xl{width:42px;height:42px;opacity:.45}
+
+@media(max-width:720px){
+  main{padding:0 13px 48px}
+  .header-inner,.poster,.footer-inner{padding-left:14px;padding-right:14px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <svg width="38" height="38" viewBox="0 0 40 40" style="flex-shrink:0">
+        <rect x="1" y="1" width="38" height="38" rx="9" fill="#1d4ed8"/>
+        <path d="M20 9 L29 14 V24 L20 31 L11 24 V14 Z" fill="none" stroke="#fff" stroke-width="2"/>
+        <path d="M20 16 L24 18.5 V23 L20 25.5 L16 23 V18.5 Z" fill="#22c55e"/>
+      </svg>
+      <div class="brand-name">Професійна освіта Луганщини</div>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-view="form" id="tab-form">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h6"/></svg>
+        Форма
+      </button>
+      <button class="tab" data-view="results" id="tab-results">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>
+        Результати <span class="badge" id="entries-count">0</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="poster">
+    <h1>Якісний склад <span class="hl">педагогічних працівників</span></h1>
+  </div>
+</header>
+
+<main>
+  <!-- ═══════════════ ВИГЛЯД: ФОРМА ═══════════════ -->
+  <section id="view-form">
+    <div class="section-divider">
+      <span class="section-label" id="form-date">станом на 01.10.2025</span>
+    </div>
+
+    <div class="form-grid">
+      <div class="card">
+        <div class="form-section">
+          <div class="form-section-head">
+            <span class="form-section-num">I</span>
+            <h2>Ідентифікація закладу та звітного року</h2>
+          </div>
+          <div class="id-grid">
+            <label>
+              <span class="field-label">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+                Назва закладу освіти
+              </span>
+              <select id="f-institution">
+                <option value="">— Оберіть заклад зі списку —</option>
+              </select>
+              <div class="field-msg" id="err-institution">Оберіть заклад освіти зі списку.</div>
+            </label>
+            <label>
+              <span class="field-label">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                Звітний рік
+              </span>
+              <select id="f-year"></select>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-head">
+            <span class="form-section-num">II</span>
+            <h2>Якісний склад за категоріями працівників</h2>
+            <span class="sub">заповніть усі категорії</span>
+          </div>
+          <div class="cat-tabs" id="cat-tabs"></div>
+          <div id="cat-panels"></div>
+        </div>
+
+        <div class="valid-summary" id="valid-summary"></div>
+
+        <div class="actions">
+          <button class="btn secondary" id="btn-save">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Зберегти чернетку
+          </button>
+          <button class="btn primary" id="btn-submit" disabled>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Відправити дані
+          </button>
+          <button class="btn ghost" id="btn-go-results">Переглянути результати →</button>
+          <span id="toast"></span>
+        </div>
+      </div>
+
+      <aside class="sidecard-wrap">
+        <div class="sidecard">
+          <div class="sidecard-head">
+            <span class="ttl">Автоматичний розрахунок</span>
+            <span class="live"><span class="live-dot"></span>live</span>
+          </div>
+          <div class="kpi-mini-lbl">Загальна кількість педпрацівників</div>
+          <div class="kpi-mini-val" id="live-total">0</div>
+          <div class="kpi-mini-sub">осіб за всіма категоріями</div>
+
+          <hr class="dash">
+
+          <div class="side-sub">Готовність категорій</div>
+          <div id="side-cats"></div>
+
+          <div class="note">※ За кожною категорією сума розподілу за рівнями має дорівнювати загальній кількості працівників цієї категорії.</div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ═══════════════ ВИГЛЯД: РЕЗУЛЬТАТИ ═══════════════ -->
+  <section id="view-results" class="hidden">
+    <div style="display:flex;align-items:center;justify-content:flex-start;border-top:2px solid var(--blue);padding-top:10px;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <span style="font-size:14px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;opacity:.78">Звітний рік:</span>
+      <select id="year-filter" style="width:auto;padding:7px 28px 7px 11px;font-size:15px">
+        <option value="all">Усі роки</option>
+      </select>
+    </div>
+
+    <div id="results-empty" class="empty hidden">
+      <svg class="icon-xl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>
+      <h3>Записів ще немає</h3>
+      <p>Заповніть форму, щоб побачити аналітику та діаграми.</p>
+      <button class="btn primary" data-view="form">← До форми</button>
+    </div>
+
+    <div id="results-content">
+      <div class="kpi-grid">
+        <div class="kpi green">
+          <div class="kpi-head"><svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Викладачі загальної освіти</div>
+          <div class="kpi-val" id="kpi-genTeach">0</div>
+          <div class="kpi-sub">загальноосвітніх дисциплін</div>
+        </div>
+        <div class="kpi cyan">
+          <div class="kpi-head"><svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Викладачі професійної освіти</div>
+          <div class="kpi-val" id="kpi-specTeach">0</div>
+          <div class="kpi-sub">спеціальних дисциплін</div>
+        </div>
+        <div class="kpi amber">
+          <div class="kpi-head"><svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M6 21V8l6-4 6 4v13"/></svg> Майстри виробничого навчання</div>
+          <div class="kpi-val" id="kpi-masters">0</div>
+          <div class="kpi-sub">за всіма закладами</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-head"><svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg> Інші педагогічні працівники</div>
+          <div class="kpi-val" id="kpi-other">0</div>
+          <div class="kpi-sub">методисти, психологи, соц. педагоги</div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-head">
+          <h3>Кількість педпрацівників <span class="hl">за категоріями</span></h3>
+          <span class="chart-fig">діаграма 1</span>
+        </div>
+        <p class="chart-desc">Загальна кількість педагогічних працівників за кожною категорією — викладачі загальної освіти, викладачі професійної освіти, майстри виробничого навчання та інші педагогічні працівники.</p>
+        <div class="chart-canvas"><canvas id="chart-overall"></canvas></div>
+      </div>
+
+      <div id="cat-results"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <span>© <span id="footer-year"></span> · НМЦ ПТО у Луганській області</span>
+    <span>Форма звітності · Якісний склад педагогічних працівників</span>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════ */
+/*  ДАНІ ТА КОНСТАНТИ                                          */
+/* ═══════════════════════════════════════════════════════════ */
+const INSTITUTIONS = [
+  'Вище професійне училище № 92 м. Сєвєродонецька',
+  'Вище професійне училище № 94',
+  'ДНЗ «Сєвєродонецке вище професійне училище»',
+  'ДНЗ «Сєвєродонецький професійний ліцей»',
+  'ДПТНЗ «Привільський професійний ліцей»',
+  'Золотівський професійний ліцей',
+  'Лисичанський професійний торгово-кулінарний ліцей',
+  'Рубіжанський професійний хіміко-технологічний ліцей',
+  'ВП «РЦПО ДЗ «ЛНУ імені Тараса Шевченка»',
+];
+const SHORT_NAMES = [
+  'ВПУ № 92','ВПУ № 94','СВПУ','СПЛ',
+  'Привільський ПЛ','Золотівський ПЛ',
+  'Лисичанський ПТКЛ','Рубіжанський ПХТЛ','РЦПО ЛНУ'
+];
+const YEARS = [2022, 2023, 2024, 2025, 2026, 2027];
+const STORAGE_KEY = 'kontingent_staff_quality_v1';
+const MAX_VALUE = 100000;
+const FONT_FAMILY = '"Times New Roman", Times, Georgia, serif';
+
+/* кваліфікаційні категорії викладачів */
+const TEACHER_LEVELS = [
+  {key:'spec',     name:'Спеціаліст',                                  color:'#0891b2'},
+  {key:'cat2',     name:'Спеціаліст II категорії',                     color:'#2563eb'},
+  {key:'cat1',     name:'Спеціаліст I категорії',                      color:'#1d4ed8'},
+  {key:'catH',     name:'Спеціаліст вищої категорії',                  color:'#16357a'},
+  {key:'catHsen',  name:'Спеціаліст вищої кат., старший викладач',     color:'#15803d'},
+  {key:'catHmet',  name:'Спеціаліст вищої кат., викладач-методист',    color:'#e0922e'},
+];
+/* тарифні розряди майстрів виробничого навчання */
+const MASTER_LEVELS = [
+  {key:'r11',   name:'11 тарифний розряд',                                  color:'#0891b2'},
+  {key:'r12',   name:'12 тарифний розряд',                                  color:'#2563eb'},
+  {key:'r13',   name:'13 тарифний розряд',                                  color:'#1d4ed8'},
+  {key:'r13c2', name:'13 тариф. розряд, майстер в/н II категорії',           color:'#16357a'},
+  {key:'r14',   name:'14 тарифний розряд',                                  color:'#22c55e'},
+  {key:'r14c2', name:'14 тариф. розряд, майстер в/н II категорії',           color:'#15803d'},
+  {key:'r14c1', name:'14 тариф. розряд, майстер в/н I категорії',            color:'#e0922e'},
+];
+/* кваліфікаційні категорії інших педпрацівників */
+const OTHER_LEVELS = [
+  {key:'spec', name:'Спеціаліст',                  color:'#0891b2'},
+  {key:'cat2', name:'Спеціаліст II категорії',     color:'#2563eb'},
+  {key:'cat1', name:'Спеціаліст I категорії',      color:'#1d4ed8'},
+  {key:'catH', name:'Спеціаліст вищої категорії',  color:'#15803d'},
+];
+
+/* категорії-вкладки */
+const CATEGORIES = [
+  {key:'genTeach',  name:'Викладачі загальноосвітніх дисциплін', short:'Викладачі заг.-осв.',
+   levels:TEACHER_LEVELS},
+  {key:'specTeach', name:'Викладачі спеціальних дисциплін',      short:'Викладачі спец.',
+   levels:TEACHER_LEVELS},
+  {key:'masters',   name:'Майстри виробничого навчання',         short:'Майстри в/н',
+   levels:MASTER_LEVELS},
+  {key:'methodist', name:'Методисти',                            short:'Методисти',
+   levels:OTHER_LEVELS},
+  {key:'psych',     name:'Психологи / практичні психологи',      short:'Психологи',
+   levels:OTHER_LEVELS},
+  {key:'socPed',    name:'Соціальні педагоги',                   short:'Соц. педагоги',
+   levels:OTHER_LEVELS},
+];
+
+const C = {
+  blue:'#1d4ed8', blueDeep:'#16357a', green:'#15803d', greenBright:'#22c55e',
+  cyan:'#0891b2', amber:'#e0922e', ink:'#16357a', white:'#ffffff',
+};
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  СТАН                                                        */
+/* ═══════════════════════════════════════════════════════════ */
+const State = {
+  view:'form',
+  entries: loadEntries(),
+  yearFilter:'all',
+  interacted:false,
+  activeCat:'genTeach',
+};
+function loadEntries(){
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch { return []; }
+}
+function saveEntries(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(State.entries));
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  ХЕЛПЕРИ                                                     */
+/* ═══════════════════════════════════════════════════════════ */
+function fmt(n){
+  if(!Number.isFinite(n)) return '—';
+  return n.toLocaleString('uk-UA');
+}
+function pct(a,b){ return b>0 ? (a/b)*100 : 0; }
+function $(s){ return document.querySelector(s); }
+function $$(s){ return [...document.querySelectorAll(s)]; }
+function numI(id){ const el=$('#'+id); if(!el) return 0; const v=parseInt(el.value,10); return Number.isFinite(v)&&v>=0?v:0; }
+const sum=a=>a.reduce((x,y)=>x+y,0);
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  ІНІЦІАЛІЗАЦІЯ                                              */
+/* ═══════════════════════════════════════════════════════════ */
+function init(){
+  const sel=$('#f-institution');
+  INSTITUTIONS.forEach(n=>{
+    const o=document.createElement('option'); o.value=n; o.textContent=n;
+    sel.appendChild(o);
+  });
+  const ys=$('#f-year');
+  YEARS.forEach(y=>{
+    const o=document.createElement('option'); o.value=y; o.textContent=y;
+    if(y===2025) o.selected=true;
+    ys.appendChild(o);
+  });
+  $('#form-date').textContent='станом на 01.10.'+(ys.value||2025);
+  $('#footer-year').textContent=new Date().getFullYear();
+
+  buildCatTabs();
+  buildCatPanels();
+
+  $('#f-institution').addEventListener('change',()=>{ State.interacted=true; updateLive(); });
+  $('#f-year').addEventListener('change',e=>{
+    State.interacted=true;
+    $('#form-date').textContent='станом на 01.10.'+e.target.value;
+    updateLive();
+  });
+
+  $$('.tab').forEach(t=>t.addEventListener('click',()=>setView(t.dataset.view)));
+  $$('button[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+  $('#btn-go-results').addEventListener('click',()=>setView('results'));
+
+  $('#btn-save').addEventListener('click',()=>persist('draft'));
+  $('#btn-submit').addEventListener('click',()=>persist('submitted'));
+
+  $('#year-filter').addEventListener('change',e=>{ State.yearFilter=e.target.value; renderResults(); });
+
+  updateLive();
+  updateEntriesCount();
+}
+
+function bindInt(id){
+  const el=$('#'+id);
+  el.addEventListener('input',()=>{
+    const cleaned=el.value.replace(/[^0-9]/g,'').replace(/^0+(?=\d)/,'');
+    if(el.value!==cleaned) el.value=cleaned;
+    State.interacted=true; updateLive();
+  });
+  el.addEventListener('keydown',e=>{ if(['e','E','+','-','.',','].includes(e.key)) e.preventDefault(); });
+}
+
+/* ── категорійні вкладки ── */
+function buildCatTabs(){
+  $('#cat-tabs').innerHTML=CATEGORIES.map((c,i)=>`
+    <button class="cat-tab ${i===0?'active':''}" data-cat="${c.key}">
+      ${i+1}. ${c.short}<span class="ct-check" id="ctc-${c.key}"></span>
+    </button>`).join('');
+  $$('.cat-tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      State.activeCat=t.dataset.cat;
+      $$('.cat-tab').forEach(x=>x.classList.toggle('active',x===t));
+      $$('.cat-panel').forEach(p=>p.classList.toggle('active',p.dataset.cat===t.dataset.cat));
+    });
+  });
+}
+function buildCatPanels(){
+  $('#cat-panels').innerHTML=CATEGORIES.map((c,ci)=>`
+    <div class="cat-panel ${ci===0?'active':''}" data-cat="${c.key}">
+      <p class="cat-hint">Зазначте загальну кількість працівників цієї категорії та їх розподіл за кваліфікаційними рівнями. % обчислюється від загальної кількості, сума рівнів має дорівнювати «Всього».</p>
+      <div class="numrow total-line">
+        <div class="lbl">Всього — ${c.name.toLowerCase()}</div>
+        <input type="number" min="0" inputmode="numeric" placeholder="0" id="ct-${c.key}-total">
+        <div class="pct empty">осіб</div>
+      </div>
+      ${c.levels.map((lv,li)=>`
+        <div class="numrow">
+          <div class="lbl">${lv.name}</div>
+          <input type="number" min="0" inputmode="numeric" placeholder="0" id="ct-${c.key}-${li}">
+          <div class="pct empty" id="ctp-${c.key}-${li}">—</div>
+        </div>`).join('')}
+      <div class="grp-check">
+        <span>Сума за рівнями:</span>
+        <span id="ctsum-${c.key}">0</span>
+        <span class="grp-badge bad" id="ctbadge-${c.key}">—</span>
+      </div>
+    </div>`).join('');
+
+  CATEGORIES.forEach(c=>{
+    bindInt('ct-'+c.key+'-total');
+    c.levels.forEach((lv,li)=> bindInt('ct-'+c.key+'-'+li));
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  ОТРИМАННЯ ДАНИХ ФОРМИ                                       */
+/* ═══════════════════════════════════════════════════════════ */
+function getFormData(){
+  const cats={};
+  CATEGORIES.forEach(c=>{
+    cats[c.key]={
+      total:numI('ct-'+c.key+'-total'),
+      levels:c.levels.map((lv,li)=>numI('ct-'+c.key+'-'+li)),
+    };
+  });
+  return {
+    institution:$('#f-institution').value,
+    year:parseInt($('#f-year').value,10),
+    cats,
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  ПЕРЕВІРКА (ВАЛІДАЦІЯ)                                       */
+/* ═══════════════════════════════════════════════════════════ */
+function catComplete(cat){
+  return cat.total>0 && sum(cat.levels)===cat.total;
+}
+function validateForm(){
+  const f=getFormData();
+  const errors=[], warnings=[], badCat=new Set();
+  let instBad=false;
+
+  if(!f.institution){ errors.push({msg:'Не обрано заклад освіти.'}); instBad=true; }
+
+  let anyData=false;
+  CATEGORIES.forEach(c=>{
+    const cat=f.cats[c.key];
+    const s=sum(cat.levels);
+    if(cat.total===0 && s===0) return;  /* категорія не заповнена — пропускаємо */
+    anyData=true;
+    let ok=true;
+    if(cat.total>MAX_VALUE){
+      errors.push({msg:`${c.name}: завелике значення «Всього».`}); ok=false;
+    }
+    if(cat.levels.some(v=>v>MAX_VALUE)){
+      errors.push({msg:`${c.name}: завелике значення в одному з рівнів.`}); ok=false;
+    }
+    if(cat.total===0){
+      errors.push({msg:`${c.name}: вкажіть загальну кількість «Всього».`}); ok=false;
+    } else if(s!==cat.total){
+      errors.push({msg:`${c.name}: сума за рівнями (${fmt(s)}) не дорівнює «Всього» (${fmt(cat.total)}).`}); ok=false;
+    }
+    if(!ok) badCat.add(c.key);
+  });
+
+  if(!anyData){
+    errors.push({msg:'Заповніть хоча б одну категорію педагогічних працівників.'});
+  }
+
+  if(f.institution&&f.year){
+    const idx=INSTITUTIONS.indexOf(f.institution);
+    if(State.entries.some(e=>e.id===`${f.year}_${idx}`)){
+      warnings.push(`Запис для цього закладу за ${f.year} рік уже існує — його буде оновлено.`);
+    }
+  }
+  return { ok:errors.length===0, errors, warnings, badCat, instBad, data:f };
+}
+
+function renderValidation(v){
+  $('#f-institution').classList.toggle('invalid', State.interacted&&v.instBad);
+  $('#err-institution').classList.toggle('show', State.interacted&&v.instBad);
+  $$('.cat-tab').forEach(t=> t.classList.toggle('invalid', State.interacted&&v.badCat.has(t.dataset.cat)));
+
+  const box=$('#valid-summary');
+  if(!State.interacted){ box.className='valid-summary'; box.innerHTML=''; return; }
+  if(v.errors.length){
+    box.className='valid-summary show err';
+    box.innerHTML=
+      '<div class="vs-head"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'+
+      `Виявлено помилки у введених даних (${v.errors.length}):</div>`+
+      '<ul>'+v.errors.map(e=>`<li>${e.msg}</li>`).join('')+'</ul>';
+  } else {
+    box.className='valid-summary show ok';
+    let html='<div class="vs-head"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'+
+      'Дані коректні — форму можна зберегти або відправити.</div>';
+    if(v.warnings.length) html+='<ul>'+v.warnings.map(w=>`<li>${w}</li>`).join('')+'</ul>';
+    box.innerHTML=html;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  LIVE РОЗРАХУНОК                                            */
+/* ═══════════════════════════════════════════════════════════ */
+function updateLive(){
+  const f=getFormData();
+  let grand=0;
+
+  CATEGORIES.forEach(c=>{
+    const cat=f.cats[c.key];
+    const s=sum(cat.levels);
+    grand+=cat.total;
+    /* % за рівнями — від «Всього», а якщо «Всього» ще не введено, від суми рівнів */
+    const base = cat.total>0 ? cat.total : s;
+    c.levels.forEach((lv,li)=>{
+      const el=$('#ctp-'+c.key+'-'+li);
+      const val=cat.levels[li];
+      if(val>0&&base>0){ el.textContent=pct(val,base).toFixed(1)+'%'; el.classList.remove('empty'); }
+      else { el.textContent='—'; el.classList.add('empty'); }
+    });
+    /* контроль суми */
+    $('#ctsum-'+c.key).textContent=fmt(s);
+    const badge=$('#ctbadge-'+c.key);
+    if(cat.total>0 && s===cat.total){ badge.className='grp-badge ok'; badge.textContent='✓ дорівнює «Всього»'; }
+    else if(cat.total>0||s>0){ badge.className='grp-badge bad'; badge.textContent='різниця '+fmt(Math.abs(s-cat.total)); }
+    else { badge.className='grp-badge bad'; badge.textContent='—'; }
+  });
+
+  $('#live-total').textContent=fmt(grand);
+
+  $('#side-cats').innerHTML=CATEGORIES.map(c=>{
+    const done=catComplete(f.cats[c.key]);
+    const empty=f.cats[c.key].total===0 && sum(f.cats[c.key].levels)===0;
+    const ctc=$('#ctc-'+c.key);
+    ctc.classList.toggle('done',done);
+    ctc.textContent=done?'✓':'';
+    let label, cls;
+    if(done){ label='✓ заповнено'; cls='ok'; }
+    else if(empty){ label='не заповнено'; cls='bad'; }
+    else { label='є помилки'; cls='bad'; }
+    return `<div class="cat-status">
+      <span>${c.short}</span>
+      <span class="cs-badge ${cls}">${label}</span>
+    </div>`;
+  }).join('');
+
+  const v=validateForm();
+  renderValidation(v);
+  $('#btn-submit').disabled=!v.ok;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  ЗБЕРЕЖЕННЯ                                                  */
+/* ═══════════════════════════════════════════════════════════ */
+function persist(status){
+  State.interacted=true;
+  const v=validateForm();
+  renderValidation(v);
+
+  if(!v.ok){
+    $('#btn-submit').disabled=true;
+    showToast('err','Виправте помилки у формі перед збереженням.');
+    $('#valid-summary').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+
+  const f=v.data;
+  const idx=INSTITUTIONS.indexOf(f.institution);
+  const id=`${f.year}_${idx}`;
+  const entry={
+    id, year:f.year, institution:f.institution, institutionIdx:idx,
+    cats:f.cats,
+    status, ts:Date.now()
+  };
+  State.entries=State.entries.filter(e=>e.id!==id).concat(entry);
+  saveEntries();
+  showToast('ok', status==='submitted' ? 'Дані перевірено, відправлено та збережено ✓' : 'Чернетку збережено ✓');
+
+  if(status==='submitted'){
+    $('#f-institution').value='';
+    CATEGORIES.forEach(c=>{
+      $('#ct-'+c.key+'-total').value='';
+      c.levels.forEach((lv,li)=> $('#ct-'+c.key+'-'+li).value='');
+    });
+    State.interacted=false;
+    updateLive();
+  }
+  updateEntriesCount();
+}
+function showToast(kind,msg){
+  const t=$('#toast');
+  t.className='toast '+(kind==='ok'?'ok':'err');
+  const ic=kind==='ok'
+    ? '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'
+    : '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+  t.innerHTML=ic+' '+msg;
+  setTimeout(()=>{ t.className=''; t.innerHTML=''; },3800);
+}
+function updateEntriesCount(){
+  $('#entries-count').textContent=State.entries.length;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  НАВІГАЦІЯ                                                  */
+/* ═══════════════════════════════════════════════════════════ */
+function setView(v){
+  State.view=v;
+  $('#view-form').classList.toggle('hidden', v!=='form');
+  $('#view-results').classList.toggle('hidden', v!=='results');
+  $('#tab-form').classList.toggle('active', v==='form');
+  $('#tab-results').classList.toggle('active', v==='results');
+  if(v==='results') renderResults();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  РЕЗУЛЬТАТИ                                                  */
+/* ═══════════════════════════════════════════════════════════ */
+let charts=[];
+
+function getFiltered(){
+  return State.yearFilter==='all'
+    ? [...State.entries]
+    : State.entries.filter(e=>e.year===parseInt(State.yearFilter,10));
+}
+/* агрегація однієї категорії за фільтрованими записами */
+function aggCat(entries,catKey){
+  const cfg=CATEGORIES.find(c=>c.key===catKey);
+  const res={ total:0, levels:cfg.levels.map(()=>0), perInst:[] };
+  entries.forEach(e=>{
+    const cat=e.cats[catKey];
+    if(!cat) return;
+    res.total+=cat.total;
+    cat.levels.forEach((v,i)=> res.levels[i]+=v);
+    res.perInst.push({ idx:e.institutionIdx, year:e.year, institution:e.institution,
+      total:cat.total, levels:[...cat.levels] });
+  });
+  return res;
+}
+
+function renderResults(){
+  const years=[...new Set(State.entries.map(e=>e.year))].sort();
+  const cur=State.yearFilter;
+  $('#year-filter').innerHTML='<option value="all">Усі роки</option>'+
+    years.map(y=>`<option value="${y}" ${cur==y?'selected':''}>${y} рік</option>`).join('');
+
+  if(State.entries.length===0){
+    $('#results-empty').classList.remove('hidden');
+    $('#results-content').classList.add('hidden');
+    return;
+  }
+  $('#results-empty').classList.add('hidden');
+  $('#results-content').classList.remove('hidden');
+
+  const filtered=getFiltered();
+
+  /* KPI — 4 блоки */
+  const aggGen=aggCat(filtered,'genTeach'), aggSpec=aggCat(filtered,'specTeach');
+  const aggMast=aggCat(filtered,'masters');
+  const aggOther=aggGroup(filtered,['methodist','psych','socPed']);
+
+  $('#kpi-genTeach').textContent=fmt(aggGen.total);
+  $('#kpi-specTeach').textContent=fmt(aggSpec.total);
+  $('#kpi-masters').textContent=fmt(aggMast.total);
+  $('#kpi-other').textContent=fmt(aggOther.total);
+
+  renderCatSections(filtered);
+}
+
+/* групи для зведеного відображення:
+   — викладачі (заг.-осв. + спец.) мають 6 рівнів;
+   — методисти + психологи + соц. педагоги мають 4 рівні;
+   — майстри в/н — окремо (7 тарифних розрядів).
+   Порядок виводу: загальна діаграма → викладачі заг. → викладачі спец. → майстри → психологи → соц. педагоги. */
+const COMBO_TEACHERS = {
+  title:'Викладачі (загальноосвітніх та спеціальних дисциплін)',
+  short:'Викладачі',
+  catKeys:['genTeach','specTeach'],
+  levels:TEACHER_LEVELS,
+};
+const COMBO_OTHER = {
+  title:'Методисти, психологи та соціальні педагоги',
+  short:'Методисти / психологи / соц. педагоги',
+  catKeys:['methodist','psych','socPed'],
+  levels:OTHER_LEVELS,
+};
+
+/* агрегація групи категорій з однаковими рівнями */
+function aggGroup(entries,catKeys){
+  const cfg=CATEGORIES.find(c=>c.key===catKeys[0]);
+  const res={ total:0, levels:cfg.levels.map(()=>0), perInst:[] };
+  const map={};
+  entries.forEach(e=>{
+    catKeys.forEach(k=>{
+      const cat=e.cats[k]; if(!cat) return;
+      res.total+=cat.total;
+      cat.levels.forEach((v,i)=> res.levels[i]+=v);
+      const mk=e.institutionIdx+'_'+e.year;
+      if(!map[mk]) map[mk]={ entryId:e.id, idx:e.institutionIdx, year:e.year, institution:e.institution,
+        total:0, levels:cfg.levels.map(()=>0) };
+      map[mk].total+=cat.total;
+      cat.levels.forEach((v,i)=> map[mk].levels[i]+=v);
+    });
+  });
+  res.perInst=Object.values(map);
+  return res;
+}
+
+/* ── секції результатів ── */
+function renderCatSections(filtered){
+  charts.forEach(c=> c&&c.destroy()); charts=[];
+
+  /* секції груп: викладачі заг.+спец → майстри → методисти/психологи/соц.педагоги */
+  let html='';
+  const sections=[
+    {id:'teachers', cfg:COMBO_TEACHERS, num:2},
+    {id:'masters',  cfg:{title:'Майстри виробничого навчання', short:'Майстри в/н',
+                         catKeys:['masters'], levels:MASTER_LEVELS}, num:3},
+    {id:'other',    cfg:COMBO_OTHER, num:4},
+  ];
+  sections.forEach(s=>{
+    html+=`
+      <div class="cat-section">
+        <div class="cat-section-head">
+          <span class="cs-num">${s.num}</span>
+          <h2>${s.cfg.title}</h2>
+          <span class="cs-line"></span>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head">
+            <h3>Кваліфікаційний розподіл — <span class="hl">${s.cfg.short}</span></h3>
+            <span class="chart-fig">діаграма ${s.num}.1</span>
+          </div>
+          <p class="chart-desc">Кількість працівників за кваліфікаційними рівнями (сумарно за обраний період).</p>
+          <div class="chart-canvas"><canvas id="chartgrp-${s.id}"></canvas></div>
+        </div>
+        <div class="chart-card pie">
+          <div class="chart-head">
+            <h3>Структура за рівнями</h3>
+            <span class="chart-fig">діаграма ${s.num}.2</span>
+          </div>
+          <div class="chart-canvas"><canvas id="chartpie-${s.id}"></canvas></div>
+          <div class="legend-list" id="legend-${s.id}"></div>
+        </div>
+        <div class="table-toolbar">
+          <h3>Таблиця — <span class="hl">${s.cfg.short}</span> за закладами</h3>
+          <button class="btn green" id="exp-${s.id}">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Завантажити в Excel
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table class="zv" id="table-${s.id}"></table>
+        </div>
+      </div>`;
+  });
+  $('#cat-results').innerHTML=html;
+
+  renderOverallChart(filtered);
+  sections.forEach(s=>{
+    renderGroup(s.id,s.cfg,filtered);
+    $('#exp-'+s.id).addEventListener('click',()=>exportGroupExcel(s.cfg));
+  });
+}
+
+const baseFontR={ family:FONT_FAMILY, size:13, weight:'600' };
+const tipR={
+  backgroundColor:C.blueDeep, titleColor:C.white, bodyColor:C.white,
+  borderColor:C.greenBright, borderWidth:1.5,
+  padding:10, cornerRadius:8, boxPadding:4,
+  titleFont:{family:FONT_FAMILY,size:13,weight:'700'}, bodyFont:{family:FONT_FAMILY,size:13,weight:'600'},
+};
+
+/* загальна діаграма — кількість працівників за всіма 6 категоріями */
+function renderOverallChart(filtered){
+  const catColors=['#1d4ed8','#16357a','#0891b2','#15803d','#22c55e','#e0922e'];
+  const data=CATEGORIES.map(c=> aggCat(filtered,c.key).total);
+  charts.push(new Chart($('#chart-overall'),{
+    type:'bar',
+    data:{
+      labels:CATEGORIES.map(c=>c.short),
+      datasets:[{ label:'Кількість педпрацівників', data, backgroundColor:catColors }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{ ...tipR, callbacks:{
+        title:(it)=>CATEGORIES[it[0].dataIndex].name } } },
+      scales:{
+        x:{ ticks:{ font:baseFontR, color:C.ink, maxRotation:25, minRotation:0 }, grid:{ display:false } },
+        y:{ ticks:{ font:baseFontR, color:C.ink }, grid:{ color:'rgba(22,53,122,.1)' }, border:{display:false} }
+      }
+    }
+  }));
+}
+
+/* секція групи — діаграма, кругова, таблиця */
+function renderGroup(id,cfg,filtered){
+  const agg=aggGroup(filtered,cfg.catKeys);
+  const levels=cfg.levels;
+
+  /* діаграма — кваліфікаційний розподіл (горизонтальна) */
+  charts.push(new Chart($('#chartgrp-'+id),{
+    type:'bar',
+    data:{
+      labels:levels.map(lv=>lv.name),
+      datasets:[{ label:'Кількість працівників', data:agg.levels, backgroundColor:levels.map(lv=>lv.color) }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:tipR },
+      scales:{
+        x:{ ticks:{ font:baseFontR, color:C.ink }, grid:{ color:'rgba(22,53,122,.1)' }, border:{display:false} },
+        y:{ ticks:{ font:baseFontR, color:C.ink }, grid:{ display:false } }
+      }
+    }
+  }));
+
+  /* кругова */
+  const pieData=levels.map((lv,i)=>({name:lv.name,value:agg.levels[i],color:lv.color})).filter(d=>d.value>0);
+  charts.push(new Chart($('#chartpie-'+id),{
+    type:'doughnut',
+    data:{
+      labels:pieData.map(d=>d.name),
+      datasets:[{ data:pieData.map(d=>d.value), backgroundColor:pieData.map(d=>d.color),
+        borderColor:C.white, borderWidth:3 }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:'58%',
+      plugins:{ legend:{display:false}, tooltip:tipR }
+    }
+  }));
+  const totalPie=pieData.reduce((a,d)=>a+d.value,0);
+  $('#legend-'+id).innerHTML = totalPie>0 ? pieData.map(d=>`
+    <div class="legend-item">
+      <span class="l"><span class="legend-swatch" style="background:${d.color}"></span>${d.name}</span>
+      <span class="v">${fmt(d.value)} <span class="p">· ${pct(d.value,totalPie).toFixed(1)}%</span></span>
+    </div>`).join('') : '<div style="opacity:.6;font-weight:600;padding:6px 0">Немає даних за цією категорією.</div>';
+
+  /* таблиця за закладами */
+  const rows=[...agg.perInst].sort((a,b)=> a.idx-b.idx || a.year-b.year);
+  const head=`
+    <thead>
+      <tr class="r1">
+        <th rowspan="2" style="width:34px">№</th>
+        <th rowspan="2" style="text-align:left">Назва ЗПО</th>
+        <th rowspan="2" style="width:66px">Рік</th>
+        <th rowspan="2">Всього</th>
+        ${levels.map(lv=>`<th colspan="2">${lv.name}</th>`).join('')}
+        <th rowspan="2" style="width:44px"></th>
+      </tr>
+      <tr class="r2">
+        ${levels.map(()=>'<th>осіб</th><th>%</th>').join('')}
+      </tr>
+    </thead>`;
+  const body=rows.map((r,i)=>`
+    <tr class="${i%2?'row-even':''}">
+      <td>${i+1}</td>
+      <td class="left">${r.institution}</td>
+      <td>${r.year}</td>
+      <td class="bold">${fmt(r.total)}</td>
+      ${levels.map((lv,li)=>`<td>${fmt(r.levels[li])}</td><td class="green-c bold">${pct(r.levels[li],r.total).toFixed(1)}%</td>`).join('')}
+      <td><button class="del-btn" data-entry-id="${r.entryId}" title="Видалити запис">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+      </button></td>
+    </tr>`).join('');
+  const totalRow=`
+    <tr class="total-row">
+      <td></td><td class="left">УСЬОГО</td><td></td>
+      <td>${fmt(agg.total)}</td>
+      ${levels.map((lv,li)=>`<td>${fmt(agg.levels[li])}</td><td class="green-c">${pct(agg.levels[li],agg.total).toFixed(1)}%</td>`).join('')}
+      <td></td>
+    </tr>`;
+  $('#table-'+id).innerHTML=head+'<tbody>'+
+    (rows.length?body:'<tr><td colspan="'+(5+levels.length*2)+'" style="padding:18px;opacity:.6">Немає даних за цією категорією.</td></tr>')+
+    (rows.length?totalRow:'')+'</tbody>';
+
+  /* обробники видалення */
+  $('#table-'+id).querySelectorAll('.del-btn').forEach(b=>{
+    b.addEventListener('click',()=>{
+      if(!confirm('Видалити цей запис закладу? Це видалить дані за всіма категоріями цього закладу за обраний рік.')) return;
+      State.entries=State.entries.filter(e=>e.id!==b.dataset.entryId);
+      saveEntries();
+      updateEntriesCount();
+      renderResults();
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  ЕКСПОРТ EXCEL                                              */
+/* ═══════════════════════════════════════════════════════════ */
+/*  ЕКСПОРТ EXCEL — окремої групи (таблиці)                     */
+/* ═══════════════════════════════════════════════════════════ */
+function exportGroupExcel(cfg){
+  const filtered=getFiltered();
+  if(filtered.length===0){ alert('Немає даних для експорту'); return; }
+
+  const agg=aggGroup(filtered,cfg.catKeys);
+  const levels=cfg.levels;
+  const headers=['№ з/п','Назва ЗПО','Рік','Всього'];
+  levels.forEach(lv=>{ headers.push(lv.name+', осіб'); headers.push(lv.name+', %'); });
+
+  const rows=[...agg.perInst].sort((a,b)=> a.idx-b.idx || a.year-b.year);
+  const data=rows.map((r,i)=>[
+    i+1, r.institution, r.year, r.total,
+    ...levels.flatMap((lv,li)=>[r.levels[li], +pct(r.levels[li],r.total).toFixed(2)])
+  ]);
+  data.push(['','УСЬОГО','',agg.total,
+    ...levels.flatMap((lv,li)=>[agg.levels[li], +pct(agg.levels[li],agg.total).toFixed(2)])]);
+
+  const ws=XLSX.utils.aoa_to_sheet([headers,...data]);
+  ws['!cols']=[{wch:6},{wch:46},{wch:8},{wch:10},
+    ...levels.flatMap(()=>[{wch:18},{wch:9}])];
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,cfg.short.slice(0,31));
+
+  const slug=cfg.short.toLowerCase().replace(/[^a-zа-яіїєґ0-9]+/gi,'_').replace(/^_+|_+$/g,'').slice(0,40);
+  XLSX.writeFile(wb,`yakisnyy_sklad_${slug}_${State.yearFilter==='all'?'усі_роки':State.yearFilter}.xlsx`);
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+init();
+</script>
+</body>
+</html>
