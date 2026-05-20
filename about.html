@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Про проєкт «ПрофОсвіта Луганщини» — цифрова платформа моніторингу діяльності закладів професійної освіти. Мета, етапи реалізації, учасники.">
+<title>Про проєкт · ПрофОсвіта Луганщини</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'brand-blue':  { DEFAULT:'#1d4ed8', deep:'#16357a', soft:'#e8eefb', mid:'#3b6ee0' },
+          'brand-green': { DEFAULT:'#15803d', bright:'#22c55e', soft:'#e1f5ee' },
+          'ink':         '#0e1a3a',
+        },
+        fontFamily: {
+          sans:  ['Inter','system-ui','sans-serif'],
+          serif: ['Lora','Georgia','serif'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,sans-serif;color:#0e1a3a;background:#f8fafc;-webkit-font-smoothing:antialiased}
+
+  .nav-link{
+    position:relative;padding:.5rem .9rem;font-size:.95rem;font-weight:500;color:#0e1a3a;border-radius:.5rem;
+    transition:color .15s, background .15s;
+  }
+  .nav-link:hover{color:#1d4ed8;background:#e8eefb}
+  .nav-link.active{color:#1d4ed8}
+  .nav-link.active::after{
+    content:"";position:absolute;left:.9rem;right:.9rem;bottom:.2rem;height:2px;background:#22c55e;border-radius:2px;
+  }
+
+  .social-link{
+    width:2rem;height:2rem;display:inline-flex;align-items:center;justify-content:center;
+    background:#1e2a4a;border-radius:.5rem;color:#cbd5e1;transition:background .15s,color .15s;
+  }
+  .social-link:hover{background:#22c55e;color:#fff}
+
+  .hero-grid{
+    background-image:
+      linear-gradient(rgba(29,78,216,.06) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(29,78,216,.06) 1px,transparent 1px);
+    background-size:42px 42px;
+    mask-image: radial-gradient(ellipse at 50% 30%, #000 50%, transparent 90%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 50%, transparent 90%);
+  }
+
+  /* Секції */
+  .section-block{margin-bottom:4rem}
+  .section-block:last-child{margin-bottom:0}
+
+  .section-eyebrow{
+    display:inline-flex;align-items:center;gap:.5rem;
+    font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#1d4ed8;margin-bottom:.7rem;
+  }
+  .section-eyebrow::before{content:"";width:1.5rem;height:2px;background:#22c55e;border-radius:2px}
+
+  .section-title{font-size:2rem;font-weight:700;color:#0e1a3a;line-height:1.15;letter-spacing:-.015em;margin-bottom:.7rem}
+  @media(min-width:768px){.section-title{font-size:2.3rem}}
+  .section-desc{font-size:1rem;color:#475569;line-height:1.6;max-width:48rem}
+
+  /* МЕТА — головна картка */
+  .mission-card{
+    background:#fff;border:1px solid #e2e8f0;border-radius:1.2rem;
+    padding:2rem;position:relative;overflow:hidden;
+    box-shadow:0 14px 32px -22px rgba(13,35,64,.22);
+  }
+  @media(min-width:768px){.mission-card{padding:2.6rem}}
+  .mission-card::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:5px;
+    background:linear-gradient(180deg,#1d4ed8 0%,#22c55e 100%);
+  }
+  .mission-quote{font-family:Lora,serif;font-style:italic;font-size:1.3rem;line-height:1.45;color:#16357a;margin-bottom:1.3rem}
+  @media(min-width:768px){.mission-quote{font-size:1.55rem}}
+  .mission-text{font-size:1rem;color:#334155;line-height:1.65;margin-bottom:1rem}
+  .mission-text:last-child{margin-bottom:0}
+  .mission-text strong{color:#0e1a3a;font-weight:600}
+
+  /* ТАЙМЛАЙН ЕТАПІВ */
+  .timeline{position:relative;padding-left:2.2rem;margin-top:.5rem}
+  .timeline::before{
+    content:"";position:absolute;left:.95rem;top:.4rem;bottom:.4rem;width:3px;
+    background:linear-gradient(180deg,#22c55e 0%,#22c55e 38%, #cbd5e1 38%, #cbd5e1 100%);
+    border-radius:2px;
+  }
+  .stage{position:relative;margin-bottom:2rem;background:#fff;border:1px solid #e2e8f0;border-radius:1rem;padding:1.5rem 1.7rem;
+    box-shadow:0 10px 26px -18px rgba(13,35,64,.18);transition:transform .2s, box-shadow .2s, border-color .2s;}
+  .stage:hover{transform:translateY(-3px);box-shadow:0 18px 36px -22px rgba(13,35,64,.28)}
+  .stage:last-child{margin-bottom:0}
+  .stage::before{
+    content:"";position:absolute;left:-1.62rem;top:1.65rem;width:1.45rem;height:1.45rem;border-radius:50%;
+    border:3px solid #fff;box-shadow:0 0 0 2.5px #cbd5e1;background:#fff;z-index:2;
+  }
+  .stage.active::before{box-shadow:0 0 0 2.5px #22c55e;background:#22c55e}
+  .stage.active{border-color:#22c55e}
+  .stage.upcoming::before{box-shadow:0 0 0 2.5px #1d4ed8}
+  .stage.upcoming{border-color:#cfdcf8}
+
+  .stage-head{display:flex;align-items:flex-start;flex-wrap:wrap;gap:.8rem;margin-bottom:1rem}
+  .stage-period{
+    display:inline-flex;align-items:center;gap:.5rem;padding:.35rem .85rem;border-radius:999px;
+    font-size:.78rem;font-weight:700;letter-spacing:.05em;
+  }
+  .stage-period.green{background:#e1f5ee;color:#15803d}
+  .stage-period.blue{background:#e8eefb;color:#1d4ed8}
+  .stage-status{
+    display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .8rem;border-radius:999px;
+    font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  }
+  .stage-status.green{background:#15803d;color:#fff}
+  .stage-status.gray{background:#f1f5f9;color:#475569}
+  .stage-status .pulse{width:.45rem;height:.45rem;background:currentColor;border-radius:50%;animation:pulse 1.6s infinite}
+  @keyframes pulse{50%{opacity:.4}}
+  .stage-title{font-size:1.3rem;font-weight:700;color:#0e1a3a;margin-bottom:.4rem;line-height:1.25;flex-basis:100%}
+  .stage-desc{font-size:.95rem;color:#475569;line-height:1.55;margin-bottom:1rem}
+  .stage-points{display:grid;grid-template-columns:1fr;gap:.55rem}
+  @media(min-width:768px){.stage-points{grid-template-columns:1fr 1fr}}
+  .stage-point{
+    display:flex;align-items:flex-start;gap:.6rem;padding:.6rem .8rem;
+    background:#f8fafc;border-radius:.5rem;font-size:.88rem;color:#334155;line-height:1.4;
+  }
+  .stage-point .sp-check{
+    width:1.1rem;height:1.1rem;flex-shrink:0;border-radius:50%;background:#e8eefb;color:#1d4ed8;
+    display:flex;align-items:center;justify-content:center;margin-top:.1rem;
+  }
+  .stage.active .stage-point .sp-check{background:#e1f5ee;color:#15803d}
+
+  /* ДЖЕРЕЛА ДАНИХ */
+  .sources-grid{display:grid;grid-template-columns:1fr;gap:.85rem}
+  @media(min-width:640px){.sources-grid{grid-template-columns:1fr 1fr}}
+  @media(min-width:1024px){.sources-grid{grid-template-columns:repeat(3, 1fr)}}
+  .source-card{
+    display:flex;gap:1rem;align-items:flex-start;padding:1.15rem 1.3rem;
+    background:#fff;border:1px solid #e2e8f0;border-radius:.85rem;text-decoration:none;color:inherit;
+    transition:transform .2s,border-color .2s,box-shadow .2s;
+  }
+  .source-card:hover{transform:translateY(-3px);border-color:#1d4ed8;box-shadow:0 18px 36px -22px rgba(29,78,216,.28)}
+  .source-icon{
+    width:2.6rem;height:2.6rem;border-radius:.55rem;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-family:Lora,serif;font-weight:600;font-size:.95rem;letter-spacing:.02em;
+  }
+  .source-icon.blue{background:#1d4ed8}
+  .source-icon.deep{background:#16357a}
+  .source-icon.green{background:#15803d}
+  .source-name{font-size:.95rem;font-weight:600;color:#0e1a3a;line-height:1.3;margin-bottom:.25rem}
+  .source-url{font-size:.78rem;color:#1d4ed8;font-weight:500;display:inline-flex;align-items:center;gap:.25rem}
+
+  /* ЦІЛЬОВІ АУДИТОРІЇ */
+  .audience-grid{display:grid;grid-template-columns:1fr;gap:.7rem}
+  @media(min-width:640px){.audience-grid{grid-template-columns:1fr 1fr}}
+  @media(min-width:1024px){.audience-grid{grid-template-columns:repeat(3,1fr)}}
+  .audience-card{
+    display:flex;gap:.85rem;align-items:center;padding:1.1rem 1.2rem;
+    background:#fff;border:1px solid #e2e8f0;border-radius:.7rem;
+    transition:transform .2s,border-color .2s;
+  }
+  .audience-card:hover{transform:translateY(-2px);border-color:#22c55e}
+  .audience-icon{
+    width:2.4rem;height:2.4rem;border-radius:.5rem;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;color:#fff;background:#22c55e;
+  }
+  .audience-icon.blue{background:#1d4ed8}
+  .audience-icon.deep{background:#16357a}
+  .audience-text{font-size:.95rem;font-weight:600;color:#0e1a3a;line-height:1.3}
+
+  /* УЧАСНИКИ */
+  .partner-grid{display:grid;grid-template-columns:1fr;gap:.9rem}
+  @media(min-width:768px){.partner-grid{grid-template-columns:1fr 1fr}}
+  .partner-card{
+    background:#fff;border:1px solid #e2e8f0;border-radius:.85rem;padding:1.4rem 1.55rem;
+    transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;overflow:hidden;
+  }
+  .partner-card::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#1d4ed8;
+  }
+  .partner-card.green::before{background:#15803d}
+  .partner-card.deep::before{background:#16357a}
+  .partner-card:hover{transform:translateY(-3px);box-shadow:0 18px 36px -22px rgba(13,35,64,.25)}
+  .partner-head{display:flex;align-items:center;gap:.9rem;margin-bottom:.7rem}
+  .partner-num{
+    font-family:Lora,serif;font-size:1.8rem;font-weight:600;line-height:1;
+    width:3rem;height:3rem;border-radius:.6rem;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;
+  }
+  .partner-num.blue{background:linear-gradient(135deg,#1d4ed8,#3b6ee0)}
+  .partner-num.green{background:linear-gradient(135deg,#15803d,#22c55e)}
+  .partner-num.deep{background:linear-gradient(135deg,#16357a,#1d4ed8)}
+  .partner-name{font-size:1.05rem;font-weight:700;color:#0e1a3a;line-height:1.25}
+  .partner-role{font-size:.78rem;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin-top:.2rem}
+  .partner-desc{font-size:.88rem;color:#475569;line-height:1.5;margin-top:.55rem}
+
+  /* РОЗРОБНИК */
+  .dev-card{
+    background:linear-gradient(120deg,#16357a 0%, #1d4ed8 100%);color:#fff;
+    border-radius:1.2rem;padding:2rem;display:flex;flex-wrap:wrap;gap:1.6rem;align-items:center;
+    box-shadow:0 20px 40px -20px rgba(13,35,64,.4);position:relative;overflow:hidden;
+  }
+  .dev-card::before{
+    content:"";position:absolute;right:-3rem;top:-3rem;width:14rem;height:14rem;
+    border:1px solid rgba(255,255,255,.15);border-radius:50%;
+  }
+  .dev-card::after{
+    content:"";position:absolute;right:1.5rem;bottom:-4rem;width:10rem;height:10rem;
+    border:1px solid rgba(34,197,94,.25);border-radius:50%;
+  }
+  .dev-avatar{
+    width:5rem;height:5rem;border-radius:50%;flex-shrink:0;
+    background:#22c55e;color:#fff;display:flex;align-items:center;justify-content:center;
+    font-family:Lora,serif;font-size:1.6rem;font-weight:600;letter-spacing:.02em;
+    box-shadow:0 12px 24px -12px rgba(34,197,94,.5);
+    position:relative;z-index:2;
+  }
+  .dev-info{flex:1;min-width:200px;position:relative;z-index:2}
+  .dev-label{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;opacity:.8;color:#86efac;margin-bottom:.3rem}
+  .dev-name{font-size:1.5rem;font-weight:700;line-height:1.2;margin-bottom:.3rem}
+  .dev-role{font-style:italic;font-family:Lora,serif;font-size:1.05rem;opacity:.9}
+
+  /* CTA */
+  .cta-row{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.4rem;position:relative;z-index:2}
+  .cta-btn{
+    display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.3rem;border-radius:.55rem;
+    font-weight:600;font-size:.92rem;text-decoration:none;transition:transform .15s, background .15s;
+  }
+  .cta-btn.primary{background:#22c55e;color:#fff}
+  .cta-btn.primary:hover{background:#16a34a;transform:translateY(-1px)}
+  .cta-btn.outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4)}
+  .cta-btn.outline:hover{background:rgba(255,255,255,.1)}
+</style>
+</head>
+<body class="antialiased">
+
+<!-- ════════ ВЕРХНЯ ОФІЦІЙНА ПАНЕЛЬ ════════ -->
+<div class="bg-brand-blue-deep text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center font-bold">НМЦ</div>
+      <div class="leading-tight">
+        <div class="font-semibold">НМЦ ПТО у Луганській області</div>
+        <div class="text-white/65">Навчально-методичний центр професійно-технічної освіти</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 sm:flex-row-reverse text-right">
+      <div class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center font-bold">ДОН</div>
+      <div class="leading-tight">
+        <div class="font-semibold">Департамент освіти і науки</div>
+        <div class="text-white/65">Луганської обласної державної адміністрації</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ ГОЛОВНА ШАПКА ════════ -->
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="38" height="38" rx="10" fill="#1d4ed8"/>
+          <path d="M20 9 L30 14 V25 L20 31 L10 25 V14 Z" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M20 16 L25 18.5 V24 L20 26.5 L15 24 V18.5 Z" fill="#22c55e"/>
+        </svg>
+        <div class="leading-tight">
+          <div class="font-semibold text-base text-ink">ПрофОсвіта</div>
+          <div class="text-[11px] text-slate-500 -mt-0.5">Луганщини</div>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-1">
+        <a href="index.html" class="nav-link">Головна</a>
+        <a href="institutions.html" class="nav-link">Заклади</a>
+        <a href="monitoring.html" class="nav-link">Моніторинг</a>
+        <a href="publications.html" class="nav-link">Видання</a>
+        <a href="about.html" class="nav-link active">Про проєкт</a>
+        <a href="contacts.html" class="nav-link">Контакти</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="monitoring-login.html" class="hidden lg:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-brand-green hover:bg-brand-green/90 rounded-lg transition-colors">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+          Кабінет ЗПО
+        </a>
+        <button id="mobile-menu-toggle" class="lg:hidden p-2 text-slate-500 hover:text-brand-blue rounded-lg hover:bg-brand-blue-soft transition-colors" aria-label="Меню">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <nav id="mobile-menu" class="hidden lg:hidden pb-4 border-t border-slate-200 pt-3">
+      <div class="flex flex-col gap-1">
+        <a href="index.html" class="nav-link">Головна</a>
+        <a href="institutions.html" class="nav-link">Заклади</a>
+        <a href="monitoring.html" class="nav-link">Моніторинг</a>
+        <a href="publications.html" class="nav-link">Видання</a>
+        <a href="about.html" class="nav-link active">Про проєкт</a>
+        <a href="contacts.html" class="nav-link">Контакти</a>
+        <a href="monitoring-login.html" class="nav-link mt-1 text-brand-green font-semibold">→ Кабінет ЗПО</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- ════════ HERO ════════ -->
+<section class="relative overflow-hidden bg-gradient-to-b from-brand-blue-soft/55 via-white to-slate-50 border-b border-slate-200">
+  <div class="absolute inset-0 hero-grid pointer-events-none" aria-hidden="true"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-9 pb-12 sm:pt-12 sm:pb-14">
+
+    <nav class="flex items-center gap-2 text-xs font-medium text-slate-500 mb-5" aria-label="Хлібні крихти">
+      <a href="index.html" class="hover:text-brand-blue transition-colors">Головна</a>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      <span class="text-brand-blue-deep">Про проєкт</span>
+    </nav>
+
+    <div class="grid lg:grid-cols-12 gap-6 items-end">
+      <div class="lg:col-span-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-brand-blue/15 rounded-full text-xs font-medium text-slate-700 mb-4 shadow-sm">
+          <span class="w-1.5 h-1.5 bg-brand-green-bright rounded-full"></span>
+          Цифрова платформа · моніторинг ЗПО Луганщини
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-ink leading-tight">
+          Про <span class="text-brand-blue">проєкт</span>
+        </h1>
+        <p class="font-serif italic text-xl sm:text-2xl text-slate-600 mt-3 leading-snug">
+          Зберегти. Систематизувати. Зробити видимим.
+        </p>
+        <p class="mt-4 text-base text-slate-600 leading-relaxed max-w-2xl">
+          Цифрова платформа «ПрофОсвіта Луганщини» — це інструмент управлінських рішень і архів інституційної пам'яті галузі. Об'єднує дані про діяльність закладів професійної освіти, що працюють в умовах релокації.
+        </p>
+      </div>
+      <div class="lg:col-span-4 grid grid-cols-3 gap-3 text-center">
+        <div class="bg-white rounded-xl border border-slate-200 px-3 py-3.5">
+          <div class="font-serif text-3xl text-brand-blue leading-none">9</div>
+          <div class="text-[10px] mt-1.5 font-semibold uppercase tracking-wider text-slate-500">Закладів</div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-200 px-3 py-3.5">
+          <div class="font-serif text-3xl text-brand-green leading-none">14</div>
+          <div class="text-[10px] mt-1.5 font-semibold uppercase tracking-wider text-slate-500">Форм</div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-200 px-3 py-3.5">
+          <div class="font-serif text-3xl text-brand-blue-deep leading-none">5</div>
+          <div class="text-[10px] mt-1.5 font-semibold uppercase tracking-wider text-slate-500">Джерел</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ ОСНОВНИЙ КОНТЕНТ ════════ -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+
+  <!-- ═══ МЕТА ПРОЄКТУ ═══ -->
+  <section class="section-block">
+    <div class="mb-7">
+      <div class="section-eyebrow">Мета та призначення</div>
+      <h2 class="section-title">Мета <span class="text-brand-blue">проєкту</span></h2>
+      <p class="section-desc">Створення єдиного інформаційно-аналітичного середовища, що дозволяє системно вивчати стан професійної освіти Луганщини та готувати обґрунтовані управлінські рішення.</p>
+    </div>
+
+    <div class="mission-card">
+      <p class="mission-quote">«Проєкт об'єднує інформаційно-аналітичні матеріали за підсумками моніторингів діяльності закладів професійної освіти Луганської області, що проводяться НМЦ ПТО.»</p>
+      <p class="mission-text">Моніторинги мають <strong>різноманітні спрямування</strong>, які дозволяють охопити й висвітлити цілий ряд питань щодо <strong>кількісних і якісних показників</strong> діяльності закладів професійної освіти.</p>
+      <p class="mission-text">Усі представлені відомості надані відповідальними особами від закладів освіти шляхом заповнення <strong>спеціально розробленого онлайн-середовища</strong> для моніторингу діяльності закладів професійної освіти регіону, що забезпечує подальший аналіз та узагальнення даних.</p>
+    </div>
+  </section>
+
+  <!-- ═══ ЕТАПИ РЕАЛІЗАЦІЇ ═══ -->
+  <section class="section-block">
+    <div class="mb-7">
+      <div class="section-eyebrow">Дорожня карта</div>
+      <h2 class="section-title">Етапи <span class="text-brand-green">реалізації</span></h2>
+      <p class="section-desc">Проєкт реалізується у два етапи: запуск базової версії платформи у травні 2026 року та розширення функціоналу впродовж жовтня 2026 — 2027 року.</p>
+    </div>
+
+    <div class="timeline">
+
+      <article class="stage active">
+        <div class="stage-head">
+          <span class="stage-period green">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Травень 2026
+          </span>
+          <span class="stage-status green">
+            <span class="pulse"></span>
+            Запуск
+          </span>
+          <h3 class="stage-title">Етап I · Запуск платформи</h3>
+        </div>
+        <p class="stage-desc">Перший етап — введення в експлуатацію базової версії цифрової платформи «ПрофОсвіта Луганщини». Запускається повний набір моніторингових форм для закладів освіти та публічна частина порталу.</p>
+        <div class="stage-points">
+          <div class="stage-point">
+            <span class="sp-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>Каталог 9 закладів освіти з повними картками</span>
+          </div>
+          <div class="stage-point">
+            <span class="sp-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>14 форм моніторингу у 3 розділах</span>
+          </div>
+          <div class="stage-point">
+            <span class="sp-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>Архів аналітичних збірників 2022–2025</span>
+          </div>
+          <div class="stage-point">
+            <span class="sp-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>Автоматична аналітика та експорт у Excel</span>
+          </div>
+          <div class="stage-point">
+            <span class="sp-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>Публічна частина порталу для громадськості</span>
+          </div>
+          <div class="stage-point">
+            <span class="sp-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>Базова версія «Кабінету ЗПО»</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="stage upcoming">
+        <div class="stage-head">
+          <span class="stage-period blue">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Жовтень 2026 — 2027
+          </span>
+          <span class="stage-status gray">Планується</span>
+          <h3 class="stage-title">Етап II · Розширення та інтеграція</h3>
+        </div>
+        <p class="stage-desc">Другий етап — розвиток платформи на основі досвіду першого року експлуатації. Поглиблена аналітика, інтеграція з державними реєстрами, мобільна версія, розширення цільових аудиторій.</p>
+        <div class="stage-points">
+          <div class="stage-point">
+            <span class="sp-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>Інтерактивний дашборд для управлінців</span>
+          </div>
+          <div class="stage-point">
+            <span class="sp-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>Інтеграція з ДП «Інфоресурс» та EDEBO</span>
+          </div>
+          <div class="stage-point">
+            <span class="sp-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>Підготовка аналітичного збірника 2026</span>
+          </div>
+          <div class="stage-point">
+            <span class="sp-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>Підтримка мобільних пристроїв</span>
+          </div>
+          <div class="stage-point">
+            <span class="sp-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>Розширений модуль працевлаштування випускників</span>
+          </div>
+          <div class="stage-point">
+            <span class="sp-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>Розгортання на інші регіони України</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═══ ДЖЕРЕЛА ДАНИХ ═══ -->
+  <section class="section-block">
+    <div class="mb-7">
+      <div class="section-eyebrow">Офіційні джерела</div>
+      <h2 class="section-title">Джерела <span class="text-brand-blue">даних</span></h2>
+      <p class="section-desc">Під час складання моніторингових статистичних досліджень використовуються дані офіційних державних інформаційних ресурсів.</p>
+    </div>
+
+    <div class="sources-grid">
+      <a href="https://mon.gov.ua/ua" target="_blank" rel="noopener" class="source-card">
+        <div class="source-icon deep">МОН</div>
+        <div>
+          <div class="source-name">Міністерство освіти і науки України</div>
+          <div class="source-url">mon.gov.ua <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></div>
+        </div>
+      </a>
+
+      <a href="https://www.inforesurs.gov.ua/" target="_blank" rel="noopener" class="source-card">
+        <div class="source-icon blue">ДП</div>
+        <div>
+          <div class="source-name">ДП «Інфоресурс»</div>
+          <div class="source-url">inforesurs.gov.ua <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></div>
+        </div>
+      </a>
+
+      <a href="https://testportal.gov.ua/" target="_blank" rel="noopener" class="source-card">
+        <div class="source-icon green">УЦО</div>
+        <div>
+          <div class="source-name">Український центр оцінювання якості освіти</div>
+          <div class="source-url">testportal.gov.ua <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></div>
+        </div>
+      </a>
+
+      <a href="https://loga.gov.ua/" target="_blank" rel="noopener" class="source-card">
+        <div class="source-icon deep">ЛОДА</div>
+        <div>
+          <div class="source-name">Луганська обласна державна адміністрація</div>
+          <div class="source-url">loga.gov.ua <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></div>
+        </div>
+      </a>
+
+      <a href="https://oblosvita-lg.gov.ua/" target="_blank" rel="noopener" class="source-card">
+        <div class="source-icon blue">ДОН</div>
+        <div>
+          <div class="source-name">Департамент освіти і науки Луганської ОДА</div>
+          <div class="source-url">oblosvita-lg.gov.ua <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></div>
+        </div>
+      </a>
+
+      <div class="source-card" style="cursor:default;background:linear-gradient(135deg,#e8eefb 0%,#e1f5ee 100%);border-color:transparent">
+        <div class="source-icon green" style="background:#22c55e">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div>
+          <div class="source-name">+ Заклади освіти</div>
+          <div class="source-url" style="color:#15803d">Дані вводяться через онлайн-форми</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ДЛЯ КОГО ═══ -->
+  <section class="section-block">
+    <div class="mb-7">
+      <div class="section-eyebrow">Цільові аудиторії</div>
+      <h2 class="section-title">Для <span class="text-brand-green">кого</span></h2>
+      <p class="section-desc">Платформа адресована управлінцям галузі — від обласних структур до керівників окремих закладів освіти, що приймають рішення на основі даних моніторингу.</p>
+    </div>
+
+    <div class="audience-grid">
+      <div class="audience-card">
+        <div class="audience-icon blue">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="audience-text">Наглядові ради</div>
+      </div>
+
+      <div class="audience-card">
+        <div class="audience-icon blue">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+        </div>
+        <div class="audience-text">Регіональна рада з ПТО</div>
+      </div>
+
+      <div class="audience-card">
+        <div class="audience-icon deep">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+        </div>
+        <div class="audience-text">Департамент освіти і науки ЛОДА</div>
+      </div>
+
+      <div class="audience-card">
+        <div class="audience-icon deep">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 22h20M3 22V8l9-5 9 5v14M9 22v-6h6v6"/></svg>
+        </div>
+        <div class="audience-text">Луганська обласна державна адміністрація</div>
+      </div>
+
+      <div class="audience-card">
+        <div class="audience-icon" style="background:#22c55e">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <div class="audience-text">НМЦ ПТО у Луганській області</div>
+      </div>
+
+      <div class="audience-card">
+        <div class="audience-icon" style="background:#22c55e">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 7h-9M14 17H5M16 21l4-4-4-4M8 3 4 7l4 4"/></svg>
+        </div>
+        <div class="audience-text">Керівники закладів освіти</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ УЧАСНИКИ ═══ -->
+  <section class="section-block">
+    <div class="mb-7">
+      <div class="section-eyebrow">Партнерство</div>
+      <h2 class="section-title">Учасники <span class="text-brand-blue">проєкту</span></h2>
+      <p class="section-desc">У створенні та підтримці платформи беруть участь заклади професійної освіти, методичний центр, обласний департамент і академічна установа.</p>
+    </div>
+
+    <div class="partner-grid">
+      <div class="partner-card blue" style="grid-column:1 / -1">
+        <div class="partner-head">
+          <div class="partner-num blue">9</div>
+          <div>
+            <div class="partner-name">Заклади професійної освіти Луганщини</div>
+            <div class="partner-role">Основні учасники мережі</div>
+          </div>
+        </div>
+        <div class="partner-desc">Дев'ять закладів — 3 вищі професійні училища, 5 професійних ліцеїв та регіональний центр професійної освіти ДЗ «Луганський національний університет імені Тараса Шевченка» — які продовжують роботу в умовах релокації. <a href="institutions.html" class="text-brand-blue font-semibold hover:underline">Переглянути всі заклади →</a></div>
+      </div>
+
+      <div class="partner-card green">
+        <div class="partner-head">
+          <div class="partner-num green">01</div>
+          <div>
+            <div class="partner-name">НМЦ ПТО у Луганській області</div>
+            <div class="partner-role">Координатор · Видавець</div>
+          </div>
+        </div>
+        <div class="partner-desc">Навчально-методичний центр професійно-технічної освіти. Координує моніторингові дослідження, готує аналітичні збірники та забезпечує методичний супровід закладів.</div>
+      </div>
+
+      <div class="partner-card deep">
+        <div class="partner-head">
+          <div class="partner-num deep">02</div>
+          <div>
+            <div class="partner-name">Департамент освіти і науки ЛОДА</div>
+            <div class="partner-role">Засновник · Управління галуззю</div>
+          </div>
+        </div>
+        <div class="partner-desc">Департамент освіти і науки Луганської обласної державної адміністрації — головний орган управління галуззю та користувач даних моніторингу для прийняття управлінських рішень.</div>
+      </div>
+
+      <div class="partner-card blue" style="grid-column:1 / -1">
+        <div class="partner-head">
+          <div class="partner-num blue">03</div>
+          <div>
+            <div class="partner-name">Інститут професійно-технічної освіти НАПН України</div>
+            <div class="partner-role">Науковий партнер · Методологія</div>
+          </div>
+        </div>
+        <div class="partner-desc">Інститут професійно-технічної освіти Національної академії педагогічних наук України — наукова установа, що забезпечує методологічну підтримку проєкту, верифікує підходи до моніторингу та сприяє науковій публікації результатів дослідження.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ РОЗРОБНИК ═══ -->
+  <section class="section-block">
+    <div class="mb-7">
+      <div class="section-eyebrow">Команда</div>
+      <h2 class="section-title">Розробник <span class="text-brand-green">платформи</span></h2>
+      <p class="section-desc">Технічна розробка цифрової платформи виконана у співпраці з НМЦ ПТО у Луганській області.</p>
+    </div>
+
+    <div class="dev-card">
+      <div class="dev-avatar">СП</div>
+      <div class="dev-info">
+        <div class="dev-label">Розробник проєкту</div>
+        <div class="dev-name">Сергій ПІДГАЙКО</div>
+        <div class="dev-role">Студент · технічна розробка платформи</div>
+        <div class="cta-row">
+          <a href="contacts.html" class="cta-btn primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Контакти проєкту
+          </a>
+          <a href="institutions.html" class="cta-btn outline">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+            Подивитися мережу
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ════════ ФУТЕР ════════ -->
+<footer class="bg-brand-blue-deep text-slate-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="1" width="38" height="38" rx="10" fill="#ffffff"/>
+            <path d="M20 9 L30 14 V25 L20 31 L10 25 V14 Z" fill="none" stroke="#16357a" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M20 16 L25 18.5 V24 L20 26.5 L15 24 V18.5 Z" fill="#22c55e"/>
+          </svg>
+          <div>
+            <div class="font-semibold text-base text-white leading-tight">ПрофОсвіта</div>
+            <div class="text-xs text-slate-400 leading-tight">Луганщини</div>
+          </div>
+        </div>
+        <p class="text-sm text-slate-400 leading-relaxed">Цифрова платформа професійної освіти Луганщини. Зберегти. Систематизувати. Зробити видимим.</p>
+      </div>
+
+      <div>
+        <h4 class="text-white font-semibold mb-4 text-sm">Навігація</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="institutions.html" class="hover:text-brand-green-bright transition-colors">Заклади освіти</a></li>
+          <li><a href="monitoring.html" class="hover:text-brand-green-bright transition-colors">Моніторинг</a></li>
+          <li><a href="publications.html" class="hover:text-brand-green-bright transition-colors">Видання</a></li>
+          <li><a href="about.html" class="hover:text-brand-green-bright transition-colors">Про проєкт</a></li>
+          <li><a href="contacts.html" class="hover:text-brand-green-bright transition-colors">Контакти</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-semibold mb-4 text-sm">Корисні ресурси</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="https://mon.gov.ua" target="_blank" rel="noopener" class="hover:text-brand-green-bright transition-colors">МОН України ↗</a></li>
+          <li><a href="https://www.inforesurs.gov.ua" target="_blank" rel="noopener" class="hover:text-brand-green-bright transition-colors">ДП «Інфоресурс» ↗</a></li>
+          <li><a href="https://testportal.gov.ua" target="_blank" rel="noopener" class="hover:text-brand-green-bright transition-colors">УЦОЯО ↗</a></li>
+          <li><a href="https://oblosvita-lg.gov.ua" target="_blank" rel="noopener" class="hover:text-brand-green-bright transition-colors">Департамент освіти ОВА ↗</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-semibold mb-4 text-sm">Контакти</h4>
+        <ul class="space-y-2 text-sm">
+          <li class="text-slate-400">пр-т Центральний, 17, кім. 203, м. Сєвєродонецьк, 93400</li>
+          <li><a href="tel:+380645240050" class="hover:text-brand-green-bright transition-colors">+380 (06452) 4-00-50</a></li>
+          <li><a href="mailto:nmc_pto_lug@ukr.net" class="hover:text-brand-green-bright transition-colors">nmc_pto_lug@ukr.net</a></li>
+        </ul>
+        <div class="flex gap-2 mt-4">
+          <a href="#" class="social-link" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Telegram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.464.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 pt-7 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-slate-500">
+      <div>© <span id="footer-year"></span> НМЦ ПТО у Луганській області. Усі права захищено.</div>
+      <div class="flex gap-5">
+        <a href="#" class="hover:text-white transition-colors">Політика конфіденційності</a>
+        <a href="#" class="hover:text-white transition-colors">Правила використання</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('footer-year').textContent = new Date().getFullYear();
+document.getElementById('mobile-menu-toggle').addEventListener('click', () => {
+  document.getElementById('mobile-menu').classList.toggle('hidden');
+});
+</script>
+
+</body>
+</html>

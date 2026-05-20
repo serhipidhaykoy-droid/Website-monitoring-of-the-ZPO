@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Кабінет закладу освіти — особистий простір для відповідальних осіб ЗПО Луганщини. Запуск у II етапі проєкту.">
+<title>Кабінет ЗПО · ПрофОсвіта Луганщини</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'brand-blue':  { DEFAULT:'#1d4ed8', deep:'#16357a', soft:'#e8eefb', mid:'#3b6ee0' },
+          'brand-green': { DEFAULT:'#15803d', bright:'#22c55e', soft:'#e1f5ee' },
+          'ink':         '#0e1a3a',
+        },
+        fontFamily: {
+          sans:  ['Inter','system-ui','sans-serif'],
+          serif: ['Lora','Georgia','serif'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,sans-serif;color:#0e1a3a;background:#f8fafc;-webkit-font-smoothing:antialiased}
+
+  .nav-link{position:relative;padding:.5rem .9rem;font-size:.95rem;font-weight:500;color:#0e1a3a;border-radius:.5rem;transition:color .15s, background .15s}
+  .nav-link:hover{color:#1d4ed8;background:#e8eefb}
+  .nav-link.active{color:#15803d}
+  .nav-link.active::after{content:"";position:absolute;left:.9rem;right:.9rem;bottom:.2rem;height:2px;background:#22c55e;border-radius:2px}
+
+  .social-link{width:2rem;height:2rem;display:inline-flex;align-items:center;justify-content:center;background:#1e2a4a;border-radius:.5rem;color:#cbd5e1;transition:background .15s,color .15s}
+  .social-link:hover{background:#22c55e;color:#fff}
+
+  .hero-grid{
+    background-image:
+      linear-gradient(rgba(29,78,216,.06) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(29,78,216,.06) 1px,transparent 1px);
+    background-size:42px 42px;
+    mask-image: radial-gradient(ellipse at 50% 30%, #000 50%, transparent 90%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 50%, transparent 90%);
+  }
+
+  .login-card{
+    background:#fff;border:1px solid #e2e8f0;border-radius:1.2rem;
+    padding:2.2rem;box-shadow:0 20px 50px -28px rgba(13,35,64,.28);
+    position:relative;overflow:hidden;
+  }
+  @media(min-width:768px){.login-card{padding:2.8rem}}
+  .login-card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:5px;
+    background:linear-gradient(90deg,#1d4ed8 0%,#22c55e 100%);
+  }
+
+  .stage-badge{
+    display:inline-flex;align-items:center;gap:.5rem;padding:.45rem 1rem;
+    background:#fef3c7;color:#854d0e;border:1px solid #fde68a;border-radius:999px;
+    font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  }
+  .stage-badge .dot{width:.5rem;height:.5rem;background:#e0922e;border-radius:50%;animation:blink 2s infinite}
+  @keyframes blink{50%{opacity:.45}}
+
+  .form-input{
+    width:100%;padding:.85rem 1rem;border:1.5px solid #e2e8f0;border-radius:.6rem;
+    font-family:Inter,system-ui,sans-serif;font-size:.95rem;color:#0e1a3a;background:#fff;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .form-input:focus{outline:none;border-color:#1d4ed8;box-shadow:0 0 0 3px rgba(29,78,216,.12)}
+  .form-input:disabled{background:#f1f5f9;color:#94a3b8;cursor:not-allowed}
+
+  .feat-row{display:flex;gap:.7rem;padding:.85rem 1rem;background:#f8fafc;border-radius:.55rem;align-items:flex-start}
+  .feat-row .fr-ic{width:1.6rem;height:1.6rem;border-radius:.4rem;background:#e8eefb;color:#1d4ed8;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .feat-row strong{color:#0e1a3a;font-weight:600;font-size:.92rem;display:block;margin-bottom:.15rem}
+  .feat-row span{font-size:.8rem;color:#64748b;line-height:1.4}
+</style>
+</head>
+<body class="antialiased">
+
+<!-- ════════ ВЕРХНЯ ОФІЦІЙНА ПАНЕЛЬ ════════ -->
+<div class="bg-brand-blue-deep text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center font-bold">НМЦ</div>
+      <div class="leading-tight">
+        <div class="font-semibold">НМЦ ПТО у Луганській області</div>
+        <div class="text-white/65">Навчально-методичний центр професійно-технічної освіти</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 sm:flex-row-reverse text-right">
+      <div class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center font-bold">ДОН</div>
+      <div class="leading-tight">
+        <div class="font-semibold">Департамент освіти і науки</div>
+        <div class="text-white/65">Луганської обласної державної адміністрації</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ ГОЛОВНА ШАПКА ════════ -->
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="38" height="38" rx="10" fill="#1d4ed8"/>
+          <path d="M20 9 L30 14 V25 L20 31 L10 25 V14 Z" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M20 16 L25 18.5 V24 L20 26.5 L15 24 V18.5 Z" fill="#22c55e"/>
+        </svg>
+        <div class="leading-tight">
+          <div class="font-semibold text-base text-ink">ПрофОсвіта</div>
+          <div class="text-[11px] text-slate-500 -mt-0.5">Луганщини</div>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-1">
+        <a href="index.html" class="nav-link">Головна</a>
+        <a href="institutions.html" class="nav-link">Заклади</a>
+        <a href="monitoring.html" class="nav-link">Моніторинг</a>
+        <a href="publications.html" class="nav-link">Видання</a>
+        <a href="about.html" class="nav-link">Про проєкт</a>
+        <a href="contacts.html" class="nav-link">Контакти</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="monitoring-login.html" class="hidden lg:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-brand-green hover:bg-brand-green/90 rounded-lg transition-colors">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+          Кабінет ЗПО
+        </a>
+        <button id="mobile-menu-toggle" class="lg:hidden p-2 text-slate-500 hover:text-brand-blue rounded-lg hover:bg-brand-blue-soft transition-colors" aria-label="Меню">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <nav id="mobile-menu" class="hidden lg:hidden pb-4 border-t border-slate-200 pt-3">
+      <div class="flex flex-col gap-1">
+        <a href="index.html" class="nav-link">Головна</a>
+        <a href="institutions.html" class="nav-link">Заклади</a>
+        <a href="monitoring.html" class="nav-link">Моніторинг</a>
+        <a href="publications.html" class="nav-link">Видання</a>
+        <a href="about.html" class="nav-link">Про проєкт</a>
+        <a href="contacts.html" class="nav-link">Контакти</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- ════════ HERO ════════ -->
+<section class="relative overflow-hidden bg-gradient-to-b from-brand-blue-soft/55 via-white to-slate-50 border-b border-slate-200">
+  <div class="absolute inset-0 hero-grid pointer-events-none" aria-hidden="true"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-9 pb-10 sm:pt-12 sm:pb-12">
+
+    <nav class="flex items-center gap-2 text-xs font-medium text-slate-500 mb-5" aria-label="Хлібні крихти">
+      <a href="index.html" class="hover:text-brand-blue transition-colors">Головна</a>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      <span class="text-brand-blue-deep">Кабінет ЗПО</span>
+    </nav>
+
+    <div class="max-w-3xl">
+      <div class="stage-badge mb-4">
+        <span class="dot"></span>
+        Запуск в II етапі · Жовтень 2026
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-ink leading-tight">
+        <span class="text-brand-green">Кабінет</span> закладу освіти
+      </h1>
+      <p class="font-serif italic text-xl text-slate-600 mt-3 leading-snug">Особистий простір для відповідальних осіб ЗПО</p>
+      <p class="mt-4 text-base text-slate-600 leading-relaxed">
+        Захищений вхід для уповноважених осіб закладів професійної освіти Луганщини. Тут ви матимете доступ до моніторингових форм закладу, історії звітів, статусу заявок та персоналізованих повідомлень від НМЦ ПТО.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ ОСНОВНИЙ КОНТЕНТ ════════ -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+  <div class="grid lg:grid-cols-12 gap-6">
+
+    <!-- ── ЛІВО: «Майбутня» форма входу (демо) ── -->
+    <div class="lg:col-span-5">
+      <div class="login-card">
+        <div class="flex items-center gap-3 mb-1">
+          <div class="w-10 h-10 rounded-lg bg-brand-green-soft text-brand-green flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+          </div>
+          <h2 class="text-xl font-bold text-ink">Вхід до кабінету</h2>
+        </div>
+        <p class="text-sm text-slate-500 mb-5 leading-relaxed">Функціональність розробляється. Нижче — попередній вигляд форми входу.</p>
+
+        <form onsubmit="event.preventDefault();showHint();">
+          <div class="mb-4">
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Email закладу</label>
+            <input type="email" class="form-input" placeholder="vpu92sever@ukr.net" disabled>
+          </div>
+          <div class="mb-4">
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Пароль</label>
+            <input type="password" class="form-input" placeholder="••••••••" disabled>
+          </div>
+          <div class="flex items-center justify-between mb-5 text-xs">
+            <label class="flex items-center gap-2 text-slate-500">
+              <input type="checkbox" disabled class="rounded">
+              Запам'ятати на цьому пристрої
+            </label>
+            <a href="contacts.html" class="text-brand-blue font-semibold hover:underline">Забули пароль?</a>
+          </div>
+
+          <button type="submit" class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-slate-200 text-slate-500 font-semibold rounded-lg cursor-not-allowed" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Увійти · доступно з жовтня 2026
+          </button>
+        </form>
+
+        <div class="mt-5 pt-5 border-t border-slate-200 text-center text-xs text-slate-500">
+          Реєстрація закладу — через офіційне звернення на<br>
+          <a href="mailto:nmc_pto_lug@ukr.net" class="text-brand-blue font-semibold">nmc_pto_lug@ukr.net</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ПРАВО: Що буде у кабінеті ── -->
+    <div class="lg:col-span-7">
+      <div class="text-xs uppercase tracking-[.16em] font-bold text-brand-blue mb-3">
+        <span class="inline-block w-6 h-0.5 bg-brand-green align-middle mr-2"></span>
+        Можливості кабінету
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-bold text-ink mb-2 leading-tight">Що ви отримаєте, коли кабінет буде доступний</h2>
+      <p class="text-slate-600 leading-relaxed mb-6">У персоналізованому розділі відповідальна особа закладу зможе вести всі моніторингові форми централізовано, бачити статус кожного звіту та автоматично формувати аналітичні підсумки.</p>
+
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="feat-row">
+          <span class="fr-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+          <div><strong>Усі форми вашого закладу</strong><span>14 моніторингових форм у єдиному місці з історією заповнень</span></div>
+        </div>
+        <div class="feat-row">
+          <span class="fr-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+          <div><strong>Статус кожного звіту</strong><span>Автоматичне відстеження дедлайнів, нагадування та прогрес заповнення</span></div>
+        </div>
+        <div class="feat-row">
+          <span class="fr-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg></span>
+          <div><strong>Аналітика по закладу</strong><span>Динаміка показників за роки, порівняння з мережею в цілому</span></div>
+        </div>
+        <div class="feat-row">
+          <span class="fr-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+          <div><strong>Експорт у Excel/PDF</strong><span>Готові звіти у форматах для подальшого використання у документообігу</span></div>
+        </div>
+        <div class="feat-row">
+          <span class="fr-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></span>
+          <div><strong>Кілька користувачів</strong><span>Гнучкі ролі для директора, заступника та відповідальних за окремі форми</span></div>
+        </div>
+        <div class="feat-row">
+          <span class="fr-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+          <div><strong>Повідомлення від НМЦ</strong><span>Прямий канал зв'язку з координатором моніторингу та методистами</span></div>
+        </div>
+      </div>
+
+      <!-- Поки що: посилання на форми без авторизації -->
+      <div class="mt-6 p-5 bg-gradient-to-br from-brand-blue-soft to-brand-green-soft border border-brand-blue/15 rounded-xl">
+        <div class="text-xs uppercase tracking-wider font-bold text-brand-blue-deep mb-2">Поки кабінет не запущено</div>
+        <p class="text-sm text-slate-600 leading-relaxed mb-3">Усі форми моніторингу вже доступні в розділі <strong class="text-ink">«Моніторинг»</strong> — без авторизації. Дані зберігаються у вашому браузері (localStorage) і не передаються нікому до надсилання офіційного звіту.</p>
+        <div class="flex flex-wrap gap-2">
+          <a href="monitoring.html" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-brand-blue hover:bg-brand-blue-deep rounded-lg transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>
+            Перейти до моніторингу
+          </a>
+          <a href="contacts.html" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-brand-blue bg-white border border-brand-blue rounded-lg hover:bg-brand-blue-soft transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Зв'язатися з НМЦ
+          </a>
+        </div>
+      </div>
+
+      <!-- Hint, що з'являється при натисканні кнопки входу -->
+      <div id="hint" class="hidden mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-900 flex items-start gap-3">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="flex-shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        <div>Функціональність авторизації буде доступна у <strong>жовтні 2026 року</strong> в межах II етапу проєкту. Поки що використовуйте форми моніторингу без авторизації — дані зберігаються в локальному сховищі браузера.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ════════ ФУТЕР ════════ -->
+<footer class="bg-brand-blue-deep text-slate-300 mt-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="1" width="38" height="38" rx="10" fill="#ffffff"/>
+            <path d="M20 9 L30 14 V25 L20 31 L10 25 V14 Z" fill="none" stroke="#16357a" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M20 16 L25 18.5 V24 L20 26.5 L15 24 V18.5 Z" fill="#22c55e"/>
+          </svg>
+          <div>
+            <div class="font-semibold text-base text-white leading-tight">ПрофОсвіта</div>
+            <div class="text-xs text-slate-400 leading-tight">Луганщини</div>
+          </div>
+        </div>
+        <p class="text-sm text-slate-400 leading-relaxed">Цифрова платформа професійної освіти Луганщини. Зберегти. Систематизувати. Зробити видимим.</p>
+      </div>
+
+      <div>
+        <h4 class="text-white font-semibold mb-4 text-sm">Навігація</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="institutions.html" class="hover:text-brand-green-bright transition-colors">Заклади освіти</a></li>
+          <li><a href="monitoring.html" class="hover:text-brand-green-bright transition-colors">Моніторинг</a></li>
+          <li><a href="publications.html" class="hover:text-brand-green-bright transition-colors">Видання</a></li>
+          <li><a href="about.html" class="hover:text-brand-green-bright transition-colors">Про проєкт</a></li>
+          <li><a href="contacts.html" class="hover:text-brand-green-bright transition-colors">Контакти</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-semibold mb-4 text-sm">Корисні ресурси</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="https://mon.gov.ua" target="_blank" rel="noopener" class="hover:text-brand-green-bright transition-colors">МОН України ↗</a></li>
+          <li><a href="https://www.inforesurs.gov.ua" target="_blank" rel="noopener" class="hover:text-brand-green-bright transition-colors">ДП «Інфоресурс» ↗</a></li>
+          <li><a href="https://testportal.gov.ua" target="_blank" rel="noopener" class="hover:text-brand-green-bright transition-colors">УЦОЯО ↗</a></li>
+          <li><a href="https://oblosvita-lg.gov.ua" target="_blank" rel="noopener" class="hover:text-brand-green-bright transition-colors">Департамент освіти ОВА ↗</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-semibold mb-4 text-sm">Контакти</h4>
+        <ul class="space-y-2 text-sm">
+          <li class="text-slate-400">пр-т Центральний, 17, кім. 203, м. Сєвєродонецьк, 93400</li>
+          <li><a href="tel:+380645240050" class="hover:text-brand-green-bright transition-colors">+380 (06452) 4-00-50</a></li>
+          <li><a href="mailto:nmc_pto_lug@ukr.net" class="hover:text-brand-green-bright transition-colors">nmc_pto_lug@ukr.net</a></li>
+        </ul>
+        <div class="flex gap-2 mt-4">
+          <a href="#" class="social-link" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Telegram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.464.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 pt-7 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-slate-500">
+      <div>© <span id="footer-year"></span> НМЦ ПТО у Луганській області. Усі права захищено.</div>
+      <div class="flex gap-5">
+        <a href="#" class="hover:text-white transition-colors">Політика конфіденційності</a>
+        <a href="#" class="hover:text-white transition-colors">Правила використання</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function showHint(){
+  document.getElementById('hint').classList.remove('hidden');
+}
+document.getElementById('footer-year').textContent = new Date().getFullYear();
+document.getElementById('mobile-menu-toggle').addEventListener('click', () => {
+  document.getElementById('mobile-menu').classList.toggle('hidden');
+});
+</script>
+
+</body>
+</html>

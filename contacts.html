@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Контакти НМЦ ПТО у Луганській області — телефон, email, адреса, форма зворотного зв'язку.">
+<title>Контакти · ПрофОсвіта Луганщини</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'brand-blue':  { DEFAULT:'#1d4ed8', deep:'#16357a', soft:'#e8eefb', mid:'#3b6ee0' },
+          'brand-green': { DEFAULT:'#15803d', bright:'#22c55e', soft:'#e1f5ee' },
+          'ink':         '#0e1a3a',
+        },
+        fontFamily: {
+          sans:  ['Inter','system-ui','sans-serif'],
+          serif: ['Lora','Georgia','serif'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,sans-serif;color:#0e1a3a;background:#f8fafc;-webkit-font-smoothing:antialiased}
+
+  .nav-link{
+    position:relative;padding:.5rem .9rem;font-size:.95rem;font-weight:500;color:#0e1a3a;border-radius:.5rem;
+    transition:color .15s, background .15s;
+  }
+  .nav-link:hover{color:#1d4ed8;background:#e8eefb}
+  .nav-link.active{color:#1d4ed8}
+  .nav-link.active::after{
+    content:"";position:absolute;left:.9rem;right:.9rem;bottom:.2rem;height:2px;background:#22c55e;border-radius:2px;
+  }
+
+  .social-link{
+    width:2rem;height:2rem;display:inline-flex;align-items:center;justify-content:center;
+    background:#1e2a4a;border-radius:.5rem;color:#cbd5e1;transition:background .15s,color .15s;
+  }
+  .social-link:hover{background:#22c55e;color:#fff}
+
+  .hero-grid{
+    background-image:
+      linear-gradient(rgba(29,78,216,.06) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(29,78,216,.06) 1px,transparent 1px);
+    background-size:42px 42px;
+    mask-image: radial-gradient(ellipse at 50% 30%, #000 50%, transparent 90%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 50%, transparent 90%);
+  }
+
+  /* ШВИДКІ КОНТАКТИ */
+  .qc-card{
+    display:block;padding:1.3rem 1.3rem;background:#fff;
+    border:1px solid #e2e8f0;border-radius:.85rem;
+    position:relative;overflow:hidden;text-decoration:none;color:inherit;
+    transition:transform .2s, box-shadow .2s, border-color .2s;
+  }
+  .qc-card::before{
+    content:"";position:absolute;left:0;top:0;right:0;height:3px;transition:height .2s;
+  }
+  .qc-card.blue::before{background:#1d4ed8}
+  .qc-card.green::before{background:#15803d}
+  .qc-card.deep::before{background:#16357a}
+  .qc-card.amber::before{background:#e0922e}
+  .qc-card:hover{transform:translateY(-3px);box-shadow:0 18px 36px -22px rgba(13,35,64,.25)}
+  .qc-card:hover::before{height:5px}
+  .qc-icon{
+    width:2.4rem;height:2.4rem;border-radius:.55rem;
+    display:flex;align-items:center;justify-content:center;margin-bottom:.85rem;
+  }
+  .qc-card.blue .qc-icon{background:#e8eefb;color:#1d4ed8}
+  .qc-card.green .qc-icon{background:#e1f5ee;color:#15803d}
+  .qc-card.deep .qc-icon{background:#e8eefb;color:#16357a}
+  .qc-card.amber .qc-icon{background:#fef3c7;color:#854d0e}
+  .qc-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#64748b;margin-bottom:.35rem}
+  .qc-value{font-size:.95rem;font-weight:600;color:#0e1a3a;line-height:1.4;word-break:break-word}
+
+  /* КАРТКА ІНФО */
+  .info-card{
+    background:#fff;border:1px solid #e2e8f0;border-radius:1rem;overflow:hidden;
+    box-shadow:0 14px 32px -22px rgba(13,35,64,.22);
+  }
+  .info-head{
+    padding:1.6rem 1.7rem 1.3rem;
+    background:linear-gradient(135deg,#e8eefb 0%, #ffffff 60%, #e1f5ee 100%);
+    border-bottom:1px solid #e2e8f0;
+  }
+  .info-badge{
+    display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .8rem;
+    background:#1d4ed8;color:#fff;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    border-radius:999px;margin-bottom:.7rem;
+  }
+  .info-title{font-size:1.4rem;font-weight:700;color:#0e1a3a;line-height:1.25;margin-bottom:.3rem}
+  @media(min-width:640px){.info-title{font-size:1.55rem}}
+  .info-subtitle{font-size:.95rem;color:#475569;line-height:1.5}
+  .info-body{padding:1.5rem 1.7rem 1.7rem;display:grid;grid-template-columns:1fr;gap:1.05rem}
+  @media(min-width:768px){.info-body{grid-template-columns:1fr 1fr}}
+
+  .info-row{display:flex;gap:.85rem;align-items:flex-start}
+  .info-row.span2{grid-column:1 / -1}
+  .ir-icon{
+    width:2.2rem;height:2.2rem;border-radius:.5rem;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;color:#fff;
+  }
+  .ir-icon.blue{background:#1d4ed8}
+  .ir-icon.deep{background:#16357a}
+  .ir-icon.green{background:#15803d}
+  .ir-icon.amber{background:#e0922e}
+  .ir-body{flex:1;min-width:0}
+  .ir-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:.25rem}
+  .ir-value{font-size:.95rem;font-weight:600;color:#0e1a3a;line-height:1.4}
+  .ir-value a{color:#1d4ed8;text-decoration:none;border-bottom:1px dashed currentColor}
+  .ir-value a:hover{color:#16357a}
+  .ir-meta{font-size:.78rem;color:#64748b;margin-top:.25rem;font-weight:500}
+
+  /* ФОРМА */
+  .form-card{
+    background:#fff;border:1px solid #e2e8f0;border-radius:1rem;
+    padding:1.6rem;box-shadow:0 14px 32px -22px rgba(13,35,64,.22);
+  }
+  @media(min-width:768px){.form-card{padding:2rem}}
+  .form-eyebrow{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#1d4ed8;margin-bottom:.5rem}
+  .form-title{font-size:1.5rem;font-weight:700;color:#0e1a3a;margin-bottom:.5rem;line-height:1.2}
+  .form-subtitle{font-size:.9rem;color:#475569;line-height:1.5;margin-bottom:1.4rem}
+
+  .form-row{margin-bottom:1.1rem}
+  .form-row.two{display:grid;grid-template-columns:1fr;gap:1.1rem}
+  @media(min-width:640px){.form-row.two{grid-template-columns:1fr 1fr}}
+  .form-label{display:block;font-size:.78rem;font-weight:600;color:#334155;margin-bottom:.4rem}
+  .form-label .req{color:#dc2626;font-weight:700}
+  .form-input, .form-textarea, .form-select{
+    width:100%;padding:.7rem .9rem;border:1.5px solid #e2e8f0;border-radius:.55rem;
+    font-family:Inter,system-ui,sans-serif;font-size:.92rem;color:#0e1a3a;background:#fff;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus{
+    outline:none;border-color:#1d4ed8;box-shadow:0 0 0 3px rgba(29,78,216,.12);
+  }
+  .form-textarea{min-height:7rem;resize:vertical;line-height:1.5}
+  .form-hint{font-size:.74rem;color:#64748b;margin-top:.35rem;display:flex;justify-content:space-between;gap:.5rem}
+
+  /* Тип запиту */
+  .rq-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+  @media(min-width:640px){.rq-grid{grid-template-columns:repeat(4,1fr)}}
+  .rq-option{cursor:pointer;position:relative}
+  .rq-option input{position:absolute;opacity:0;width:0;height:0}
+  .rq-card{
+    display:flex;flex-direction:column;align-items:center;gap:.45rem;
+    padding:.85rem .6rem;border:1.5px solid #e2e8f0;border-radius:.55rem;
+    text-align:center;transition:all .15s;background:#fff;
+  }
+  .rq-card .rq-icon{
+    width:2rem;height:2rem;border-radius:.45rem;background:#f1f5f9;color:#475569;
+    display:flex;align-items:center;justify-content:center;transition:all .15s;
+  }
+  .rq-card .rq-label{font-size:.78rem;font-weight:600;color:#475569;line-height:1.2}
+  .rq-option:hover .rq-card{border-color:#cbd5e1;background:#f8fafc}
+  .rq-option input:checked + .rq-card{border-color:#1d4ed8;background:#e8eefb}
+  .rq-option input:checked + .rq-card .rq-icon{background:#1d4ed8;color:#fff}
+  .rq-option input:checked + .rq-card .rq-label{color:#16357a;font-weight:700}
+
+  /* Чекбокс згоди */
+  .agree-row{display:flex;align-items:flex-start;gap:.6rem;margin:1.1rem 0 1.3rem}
+  .agree-row input[type="checkbox"]{
+    flex-shrink:0;width:1.1rem;height:1.1rem;border:1.5px solid #cbd5e1;border-radius:.25rem;
+    margin-top:.1rem;cursor:pointer;accent-color:#1d4ed8;
+  }
+  .agree-row label{font-size:.82rem;color:#475569;line-height:1.5;cursor:pointer}
+  .agree-row label a{color:#1d4ed8;text-decoration:underline}
+
+  /* Кнопка */
+  .submit-btn{
+    width:100%;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+    padding:.95rem 1.4rem;background:#1d4ed8;color:#fff;border:none;border-radius:.6rem;
+    font-family:Inter,system-ui,sans-serif;font-size:.98rem;font-weight:600;cursor:pointer;
+    transition:transform .15s, background .15s, box-shadow .15s;
+    box-shadow:0 8px 22px -10px rgba(29,78,216,.55);
+  }
+  .submit-btn:hover:not(:disabled){background:#16357a;transform:translateY(-1px);box-shadow:0 14px 26px -12px rgba(29,78,216,.6)}
+  .submit-btn:disabled{background:#cbd5e1;cursor:not-allowed;box-shadow:none}
+  .submit-btn svg.spin{animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* Повідомлення про успіх */
+  .success-msg{
+    margin-top:1.3rem;padding:1rem 1.2rem;background:#e1f5ee;border:1px solid #22c55e;
+    border-radius:.7rem;display:flex;align-items:flex-start;gap:.7rem;
+    animation:slideIn .3s ease-out;
+  }
+  .success-msg .sm-icon{
+    width:2rem;height:2rem;background:#22c55e;color:#fff;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .success-msg .sm-text{flex:1}
+  .success-msg .sm-title{font-size:.92rem;font-weight:700;color:#15803d;margin-bottom:.2rem}
+  .success-msg .sm-desc{font-size:.83rem;color:#15803d;line-height:1.45}
+  @keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+  .hidden{display:none !important}
+</style>
+</head>
+<body class="antialiased">
+
+<!-- ════════ ВЕРХНЯ ОФІЦІЙНА ПАНЕЛЬ ════════ -->
+<div class="bg-brand-blue-deep text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center font-bold">НМЦ</div>
+      <div class="leading-tight">
+        <div class="font-semibold">НМЦ ПТО у Луганській області</div>
+        <div class="text-white/65">Навчально-методичний центр професійно-технічної освіти</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 sm:flex-row-reverse text-right">
+      <div class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center font-bold">ДОН</div>
+      <div class="leading-tight">
+        <div class="font-semibold">Департамент освіти і науки</div>
+        <div class="text-white/65">Луганської обласної державної адміністрації</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ ГОЛОВНА ШАПКА ════════ -->
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="38" height="38" rx="10" fill="#1d4ed8"/>
+          <path d="M20 9 L30 14 V25 L20 31 L10 25 V14 Z" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M20 16 L25 18.5 V24 L20 26.5 L15 24 V18.5 Z" fill="#22c55e"/>
+        </svg>
+        <div class="leading-tight">
+          <div class="font-semibold text-base text-ink">ПрофОсвіта</div>
+          <div class="text-[11px] text-slate-500 -mt-0.5">Луганщини</div>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-1">
+        <a href="index.html" class="nav-link">Головна</a>
+        <a href="institutions.html" class="nav-link">Заклади</a>
+        <a href="monitoring.html" class="nav-link">Моніторинг</a>
+        <a href="publications.html" class="nav-link">Видання</a>
+        <a href="about.html" class="nav-link">Про проєкт</a>
+        <a href="contacts.html" class="nav-link active">Контакти</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="monitoring-login.html" class="hidden lg:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-brand-green hover:bg-brand-green/90 rounded-lg transition-colors">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+          Кабінет ЗПО
+        </a>
+        <button id="mobile-menu-toggle" class="lg:hidden p-2 text-slate-500 hover:text-brand-blue rounded-lg hover:bg-brand-blue-soft transition-colors" aria-label="Меню">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <nav id="mobile-menu" class="hidden lg:hidden pb-4 border-t border-slate-200 pt-3">
+      <div class="flex flex-col gap-1">
+        <a href="index.html" class="nav-link">Головна</a>
+        <a href="institutions.html" class="nav-link">Заклади</a>
+        <a href="monitoring.html" class="nav-link">Моніторинг</a>
+        <a href="publications.html" class="nav-link">Видання</a>
+        <a href="about.html" class="nav-link">Про проєкт</a>
+        <a href="contacts.html" class="nav-link active">Контакти</a>
+        <a href="monitoring-login.html" class="nav-link mt-1 text-brand-green font-semibold">→ Кабінет ЗПО</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- ════════ HERO ════════ -->
+<section class="relative overflow-hidden bg-gradient-to-b from-brand-blue-soft/55 via-white to-slate-50 border-b border-slate-200">
+  <div class="absolute inset-0 hero-grid pointer-events-none" aria-hidden="true"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-9 pb-10 sm:pt-12 sm:pb-12">
+
+    <nav class="flex items-center gap-2 text-xs font-medium text-slate-500 mb-5" aria-label="Хлібні крихти">
+      <a href="index.html" class="hover:text-brand-blue transition-colors">Головна</a>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      <span class="text-brand-blue-deep">Контакти</span>
+    </nav>
+
+    <div class="max-w-3xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-brand-blue/15 rounded-full text-xs font-medium text-slate-700 mb-4 shadow-sm">
+        <span class="w-1.5 h-1.5 bg-brand-green-bright rounded-full"></span>
+        Зв'яжіться з нами
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-ink leading-tight">
+        <span class="text-brand-blue">Контакти</span>
+      </h1>
+      <p class="mt-4 text-base text-slate-600 leading-relaxed">
+        Маєте запитання щодо моніторингу діяльності закладів професійної освіти, пропозиції до співпраці або потребуєте методичної консультації? Зв'яжіться з Навчально-методичним центром професійно-технічної освіти у Луганській області зручним для вас способом.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ ОСНОВНИЙ КОНТЕНТ ════════ -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+
+  <!-- ═══ ШВИДКІ КОНТАКТИ ═══ -->
+  <section class="mb-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="tel:+380645240050" class="qc-card blue">
+        <div class="qc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="qc-label">Телефон</div>
+        <div class="qc-value">+380 (06452) 4-00-50</div>
+      </a>
+
+      <a href="mailto:nmc_pto_lug@ukr.net" class="qc-card green">
+        <div class="qc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </div>
+        <div class="qc-label">Email</div>
+        <div class="qc-value">nmc_pto_lug@ukr.net</div>
+      </a>
+
+      <div class="qc-card deep">
+        <div class="qc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-8 8-14a8 8 0 1 0-16 0c0 6 8 14 8 14z"/><circle cx="12" cy="8" r="3"/></svg>
+        </div>
+        <div class="qc-label">Адреса</div>
+        <div class="qc-value">пр-т Центральний, 17,<br>м. Сєвєродонецьк, 93400</div>
+      </div>
+
+      <div class="qc-card amber">
+        <div class="qc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="qc-label">Графік роботи</div>
+        <div class="qc-value">Пн–Пт · 9:00–17:00</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ОСНОВНА ІНФОРМАЦІЯ + ФОРМА ═══ -->
+  <section class="grid lg:grid-cols-12 gap-6">
+
+    <!-- ЛІВО: ІНФО-КАРТКА -->
+    <div class="lg:col-span-5">
+      <div class="info-card">
+        <div class="info-head">
+          <span class="info-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Контактні дані
+          </span>
+          <h2 class="info-title">НМЦ ПТО у Луганській області</h2>
+          <p class="info-subtitle">Навчально-методичний центр професійно-технічної освіти</p>
+        </div>
+
+        <div class="info-body">
+
+          <div class="info-row span2">
+            <div class="ir-icon deep">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+            </div>
+            <div class="ir-body">
+              <div class="ir-label">Адреса</div>
+              <div class="ir-value">пр-т Центральний, 17, кім. 203,<br>м. Сєвєродонецьк, Луганська область, 93400</div>
+              <div class="ir-meta">Юридична адреса · до релокації</div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="ir-icon blue">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div class="ir-body">
+              <div class="ir-label">Телефон</div>
+              <div class="ir-value"><a href="tel:+380645240050">+380 (06452) 4-00-50</a></div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="ir-icon amber">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="ir-body">
+              <div class="ir-label">Графік</div>
+              <div class="ir-value">Пн–Пт · 9:00–17:00</div>
+              <div class="ir-meta">Обідня перерва · 13:00–14:00</div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="ir-icon green">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div class="ir-body">
+              <div class="ir-label">Email</div>
+              <div class="ir-value"><a href="mailto:nmc_pto_lug@ukr.net">nmc_pto_lug@ukr.net</a></div>
+              <div class="ir-meta">Основна адреса</div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="ir-icon green">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div class="ir-body">
+              <div class="ir-label">Email · резерв</div>
+              <div class="ir-value"><a href="mailto:nmc.pto.lug.24@gmail.com">nmc.pto.lug.24@gmail.com</a></div>
+            </div>
+          </div>
+
+          <div class="info-row span2">
+            <div class="ir-icon blue">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <div class="ir-body">
+              <div class="ir-label">Веб-сайт</div>
+              <div class="ir-value"><a href="https://www.nmc-pto.lg.ua" target="_blank" rel="noopener">www.nmc-pto.lg.ua</a></div>
+            </div>
+          </div>
+
+          <div class="info-row span2" style="padding-top:1rem;border-top:1px solid #e2e8f0">
+            <div class="ir-icon" style="background:#1d4ed8">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+            </div>
+            <div class="ir-body">
+              <div class="ir-label">Соціальні мережі</div>
+              <div class="flex gap-2 mt-2">
+                <a href="#" aria-label="Facebook" class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-slate-100 text-slate-500 hover:bg-brand-blue hover:text-white transition-colors">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                <a href="#" aria-label="Telegram" class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-slate-100 text-slate-500 hover:bg-brand-blue hover:text-white transition-colors">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.464.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                </a>
+                <a href="#" aria-label="YouTube" class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-slate-100 text-slate-500 hover:bg-brand-blue hover:text-white transition-colors">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ПРАВО: ФОРМА -->
+    <div class="lg:col-span-7">
+      <div class="form-card">
+        <div class="form-eyebrow">Зворотний зв'язок</div>
+        <h2 class="form-title">Напишіть нам</h2>
+        <p class="form-subtitle">Заповніть форму — ми зв'яжемося з вами протягом 2 робочих днів. Поля з зірочкою <span class="req">*</span> обов'язкові.</p>
+
+        <form id="contact-form" novalidate>
+
+          <!-- Тип запиту -->
+          <div class="form-row">
+            <label class="form-label">Тип запиту <span class="req">*</span></label>
+            <div class="rq-grid">
+              <label class="rq-option">
+                <input type="radio" name="request-type" value="general" checked>
+                <div class="rq-card">
+                  <span class="rq-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+                  <span class="rq-label">Загальне</span>
+                </div>
+              </label>
+              <label class="rq-option">
+                <input type="radio" name="request-type" value="monitoring">
+                <div class="rq-card">
+                  <span class="rq-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg></span>
+                  <span class="rq-label">Моніторинг</span>
+                </div>
+              </label>
+              <label class="rq-option">
+                <input type="radio" name="request-type" value="technical">
+                <div class="rq-card">
+                  <span class="rq-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></span>
+                  <span class="rq-label">Технічне</span>
+                </div>
+              </label>
+              <label class="rq-option">
+                <input type="radio" name="request-type" value="partnership">
+                <div class="rq-card">
+                  <span class="rq-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                  <span class="rq-label">Співпраця</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- ПІБ + Email -->
+          <div class="form-row two">
+            <div>
+              <label for="contact-name" class="form-label">Прізвище та ім'я <span class="req">*</span></label>
+              <input type="text" id="contact-name" name="name" class="form-input" placeholder="Олена Петренко" required>
+            </div>
+            <div>
+              <label for="contact-email" class="form-label">Email <span class="req">*</span></label>
+              <input type="email" id="contact-email" name="email" class="form-input" placeholder="petrenko@example.com" required>
+            </div>
+          </div>
+
+          <!-- Телефон + Організація -->
+          <div class="form-row two">
+            <div>
+              <label for="contact-phone" class="form-label">Телефон</label>
+              <input type="tel" id="contact-phone" name="phone" class="form-input" placeholder="+380 (XX) XXX-XX-XX">
+            </div>
+            <div>
+              <label for="contact-org" class="form-label">Заклад / організація</label>
+              <input type="text" id="contact-org" name="organization" class="form-input" placeholder="Напр. ВПУ № 92">
+            </div>
+          </div>
+
+          <!-- Тема -->
+          <div class="form-row">
+            <label for="contact-subject" class="form-label">Тема звернення <span class="req">*</span></label>
+            <input type="text" id="contact-subject" name="subject" class="form-input" placeholder="Коротко опишіть суть звернення" required>
+          </div>
+
+          <!-- Повідомлення -->
+          <div class="form-row">
+            <label for="contact-message" class="form-label">Повідомлення <span class="req">*</span></label>
+            <textarea id="contact-message" name="message" class="form-textarea" maxlength="2000" placeholder="Опишіть деталі звернення…" required></textarea>
+            <div class="form-hint">
+              <span>Розгорнуто, але по суті — це допоможе нам швидше відповісти.</span>
+              <span><span id="message-counter">0</span> / 2000</span>
+            </div>
+          </div>
+
+          <!-- Згода -->
+          <div class="agree-row">
+            <input type="checkbox" id="contact-agree" name="agree" required>
+            <label for="contact-agree">Я погоджуюся з <a href="#">політикою конфіденційності</a> та обробкою моїх персональних даних з метою опрацювання звернення відповідно до Закону України «Про захист персональних даних».</label>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submit-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Надіслати повідомлення
+          </button>
+
+          <div id="form-success" class="success-msg hidden">
+            <div class="sm-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="sm-text">
+              <div class="sm-title">Повідомлення надіслано!</div>
+              <div class="sm-desc">Дякуємо за звернення. Ми зв'яжемося з вами протягом 2 робочих днів за вказаним email.</div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<!-- ════════ ФУТЕР ════════ -->
+<footer class="bg-brand-blue-deep text-slate-300 mt-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="1" width="38" height="38" rx="10" fill="#ffffff"/>
+            <path d="M20 9 L30 14 V25 L20 31 L10 25 V14 Z" fill="none" stroke="#16357a" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M20 16 L25 18.5 V24 L20 26.5 L15 24 V18.5 Z" fill="#22c55e"/>
+          </svg>
+          <div>
+            <div class="font-semibold text-base text-white leading-tight">ПрофОсвіта</div>
+            <div class="text-xs text-slate-400 leading-tight">Луганщини</div>
+          </div>
+        </div>
+        <p class="text-sm text-slate-400 leading-relaxed">Цифрова платформа професійної освіти Луганщини. Зберегти. Систематизувати. Зробити видимим.</p>
+      </div>
+
+      <div>
+        <h4 class="text-white font-semibold mb-4 text-sm">Навігація</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="institutions.html" class="hover:text-brand-green-bright transition-colors">Заклади освіти</a></li>
+          <li><a href="monitoring.html" class="hover:text-brand-green-bright transition-colors">Моніторинг</a></li>
+          <li><a href="publications.html" class="hover:text-brand-green-bright transition-colors">Видання</a></li>
+          <li><a href="about.html" class="hover:text-brand-green-bright transition-colors">Про проєкт</a></li>
+          <li><a href="contacts.html" class="hover:text-brand-green-bright transition-colors">Контакти</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-semibold mb-4 text-sm">Корисні ресурси</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="https://mon.gov.ua" target="_blank" rel="noopener" class="hover:text-brand-green-bright transition-colors">МОН України ↗</a></li>
+          <li><a href="https://www.inforesurs.gov.ua" target="_blank" rel="noopener" class="hover:text-brand-green-bright transition-colors">ДП «Інфоресурс» ↗</a></li>
+          <li><a href="https://testportal.gov.ua" target="_blank" rel="noopener" class="hover:text-brand-green-bright transition-colors">УЦОЯО ↗</a></li>
+          <li><a href="https://oblosvita-lg.gov.ua" target="_blank" rel="noopener" class="hover:text-brand-green-bright transition-colors">Департамент освіти ОВА ↗</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-semibold mb-4 text-sm">Контакти</h4>
+        <ul class="space-y-2 text-sm">
+          <li class="text-slate-400">пр-т Центральний, 17, кім. 203, м. Сєвєродонецьк, 93400</li>
+          <li><a href="tel:+380645240050" class="hover:text-brand-green-bright transition-colors">+380 (06452) 4-00-50</a></li>
+          <li><a href="mailto:nmc_pto_lug@ukr.net" class="hover:text-brand-green-bright transition-colors">nmc_pto_lug@ukr.net</a></li>
+        </ul>
+        <div class="flex gap-2 mt-4">
+          <a href="#" class="social-link" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Telegram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.464.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 pt-7 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-slate-500">
+      <div>© <span id="footer-year"></span> НМЦ ПТО у Луганській області. Усі права захищено.</div>
+      <div class="flex gap-5">
+        <a href="#" class="hover:text-white transition-colors">Політика конфіденційності</a>
+        <a href="#" class="hover:text-white transition-colors">Правила використання</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ═════════ ЛІЧИЛЬНИК СИМВОЛІВ ═════════ */
+const msgField = document.getElementById('contact-message');
+const msgCounter = document.getElementById('message-counter');
+if (msgField && msgCounter) {
+  msgField.addEventListener('input', () => {
+    msgCounter.textContent = msgField.value.length;
+  });
+}
+
+/* ═════════ ВІДПРАВКА ФОРМИ ═════════ */
+const form = document.getElementById('contact-form');
+const submitBtn = document.getElementById('submit-btn');
+const successMsg = document.getElementById('form-success');
+
+if (form) {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    /* Базова валідація */
+    const email = document.getElementById('contact-email').value;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Будь ласка, введіть коректну email-адресу');
+      return;
+    }
+    if (!document.getElementById('contact-agree').checked) {
+      alert('Будь ласка, надайте згоду на обробку персональних даних');
+      return;
+    }
+
+    /* Анімація відправки */
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<svg class="spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Відправляємо…';
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+      successMsg.classList.remove('hidden');
+      successMsg.scrollIntoView({behavior:'smooth', block:'center'});
+      form.reset();
+      if (msgCounter) msgCounter.textContent = '0';
+      submitBtn.innerHTML = originalText;
+      submitBtn.disabled = false;
+
+      setTimeout(() => {
+        successMsg.classList.add('hidden');
+      }, 10000);
+    }, 1200);
+  });
+}
+
+/* ═════════ ФУТЕР ТА МОБІЛЬНЕ МЕНЮ ═════════ */
+document.getElementById('footer-year').textContent = new Date().getFullYear();
+document.getElementById('mobile-menu-toggle').addEventListener('click', () => {
+  document.getElementById('mobile-menu').classList.toggle('hidden');
+});
+</script>
+
+</body>
+</html>
