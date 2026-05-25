@@ -1,0 +1,15 @@
+# Claude Code локальні налаштування — не комітити
+.claude/
+
+# Node.js (на майбутнє, коли з'явиться package.json)
+node_modules/
+npm-debug.log*
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
