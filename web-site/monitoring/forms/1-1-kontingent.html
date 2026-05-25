@@ -1117,5 +1117,121 @@ function exportExcel(){
 /* ═══════════════════════════════════════════════════════════ */
 init();
 </script>
+
+<!-- ═══ КАТАЛОГ ФОРМ МОНІТОРИНГУ — collapsible sidebar ═══ -->
+<style>
+  .fcat-toggle{
+    position:fixed;top:50%;left:0;transform:translateY(-50%);z-index:60;
+    background:#1d4ed8;color:#fff;border:none;cursor:pointer;
+    padding:18px 8px;border-radius:0 10px 10px 0;
+    box-shadow:0 6px 16px rgba(0,0,0,.22);
+    font-family:Inter,Arial,sans-serif;font-size:12px;font-weight:700;
+    writing-mode:vertical-rl;letter-spacing:.05em;
+    transition:background .15s;
+  }
+  .fcat-toggle:hover{background:#16357a}
+  .fcat-backdrop{
+    position:fixed;inset:0;background:rgba(13,35,64,.45);z-index:70;
+    display:none;opacity:0;transition:opacity .25s;
+  }
+  .fcat-panel{
+    position:fixed;top:0;left:0;bottom:0;width:360px;max-width:90vw;
+    background:#fff;z-index:71;box-shadow:8px 0 28px rgba(0,0,0,.22);
+    transform:translateX(-100%);transition:transform .3s ease;
+    display:flex;flex-direction:column;font-family:Inter,Arial,sans-serif;
+  }
+  .fcat-head{
+    padding:18px 20px;border-bottom:1px solid #e2e8f0;
+    display:flex;justify-content:space-between;align-items:center;
+    background:linear-gradient(135deg,#e8eefb 0%,#fff 60%,#e1f5ee 100%);
+  }
+  .fcat-head h3{margin:0;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#16357a}
+  .fcat-close{background:none;border:none;cursor:pointer;color:#475569;padding:6px 8px;font-size:18px;line-height:1;border-radius:6px}
+  .fcat-close:hover{background:#f1f5f9;color:#0e1a3a}
+  .fcat-nav{flex:1;overflow-y:auto;padding:14px}
+  .fcat-section{margin-bottom:16px}
+  .fcat-section-title{
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    padding:6px 10px;margin-bottom:4px;border-radius:6px;display:flex;align-items:center;gap:8px;
+  }
+  .fcat-section-title .roman{font-family:Lora,serif;font-size:18px;font-weight:600}
+  .fcat-section.s1 .fcat-section-title{color:#1d4ed8;background:#e8eefb}
+  .fcat-section.s2 .fcat-section-title{color:#15803d;background:#e1f5ee}
+  .fcat-section.s3 .fcat-section-title{color:#16357a;background:#e8eefb}
+  .fcat-link{
+    display:flex;align-items:flex-start;gap:8px;
+    padding:9px 12px;color:#0e1a3a;text-decoration:none;font-size:13.5px;
+    border-radius:7px;margin-bottom:2px;line-height:1.35;
+    transition:all .15s;
+  }
+  .fcat-link:hover{background:#f1f5f9;color:#1d4ed8;transform:translateX(2px)}
+  .fcat-link.active{background:#15803d;color:#fff;font-weight:600}
+  .fcat-link .num{
+    flex-shrink:0;font-family:Lora,serif;font-size:13px;font-weight:700;
+    width:30px;height:22px;background:#f1f5f9;color:#475569;border-radius:5px;
+    display:inline-flex;align-items:center;justify-content:center;
+  }
+  .fcat-link.active .num{background:rgba(255,255,255,.25);color:#fff}
+  .fcat-foot{
+    padding:14px 20px;border-top:1px solid #e2e8f0;background:#f8fafc;
+    font-size:13px;color:#475569;
+  }
+  .fcat-foot a{color:#1d4ed8;text-decoration:none;font-weight:600}
+  .fcat-foot a:hover{text-decoration:underline}
+  body.fcat-open .fcat-backdrop{display:block;opacity:1}
+  body.fcat-open .fcat-panel{transform:translateX(0)}
+  @media print { .fcat-toggle, .fcat-backdrop, .fcat-panel { display:none !important } }
+</style>
+<button class="fcat-toggle" id="fcat-toggle" aria-label="Каталог форм моніторингу">📋 Каталог форм</button>
+<div class="fcat-backdrop" id="fcat-backdrop"></div>
+<aside class="fcat-panel" id="fcat-panel" aria-label="Каталог форм моніторингу">
+  <div class="fcat-head">
+    <h3>Форми моніторингу</h3>
+    <button class="fcat-close" id="fcat-close" aria-label="Закрити">✕</button>
+  </div>
+  <nav class="fcat-nav">
+    <div class="fcat-section s1">
+      <div class="fcat-section-title"><span class="roman">І</span> Контингент</div>
+      <a class="fcat-link" href="/monitoring/forms/1-1-kontingent.html"><span class="num">1.1</span><span>Контингент за регіональним замовленням</span></a>
+      <a class="fcat-link" href="/monitoring/forms/1-2-kontingent-stat-vik.html"><span class="num">1.2</span><span>Контингент за статтю та віком</span></a>
+      <a class="fcat-link" href="/monitoring/forms/1-3-socialno-vrazlyvi.html"><span class="num">1.3</span><span>Соціально вразливі категорії</span></a>
+      <a class="fcat-link" href="/monitoring/forms/1-4-misce-perebuvannia.html"><span class="num">1.4</span><span>Місце перебування здобувачів</span></a>
+      <a class="fcat-link" href="/monitoring/forms/1-5-perelik-profesiy.html"><span class="num">1.5</span><span>Перелік професій підготовки</span></a>
+      <a class="fcat-link" href="/monitoring/forms/1-6-vypusk-pratsevlashtuvannia.html"><span class="num">1.6</span><span>Випуск та працевлаштування</span></a>
+      <a class="fcat-link" href="/monitoring/forms/1-7-vidsiv-kontyngentu.html"><span class="num">1.7</span><span>Відсів контингенту</span></a>
+    </div>
+    <div class="fcat-section s2">
+      <div class="fcat-section-title"><span class="roman">ІІ</span> Якість освіти</div>
+      <a class="fcat-link" href="/monitoring/forms/2-1-analiz-dkr.html"><span class="num">2.1</span><span>Аналіз результатів ДКР та БСО</span></a>
+      <a class="fcat-link" href="/monitoring/forms/2-2-analiz-rezultativ.html"><span class="num">2.2</span><span>Аналіз результатів освітньої діяльності</span></a>
+    </div>
+    <div class="fcat-section s3">
+      <div class="fcat-section-title"><span class="roman">ІІІ</span> Педкадри</div>
+      <a class="fcat-link" href="/monitoring/forms/3-1-pedpracivnyky.html"><span class="num">3.1</span><span>Кількісний склад педпрацівників</span></a>
+      <a class="fcat-link" href="/monitoring/forms/3-2-pedpracivnyky-sklad.html"><span class="num">3.2</span><span>Склад за статтю, віком та стажем</span></a>
+      <a class="fcat-link" href="/monitoring/forms/3-3-misce-pedpracivnyky.html"><span class="num">3.3</span><span>Місце перебування педпрацівників</span></a>
+      <a class="fcat-link" href="/monitoring/forms/3-4-atestaciya.html"><span class="num">3.4</span><span>Підсумки атестації</span></a>
+      <a class="fcat-link" href="/monitoring/forms/3-5-yakisnyy-sklad.html"><span class="num">3.5</span><span>Якісний склад педпрацівників</span></a>
+    </div>
+  </nav>
+  <div class="fcat-foot">
+    <a href="/monitoring/">← До каталогу моніторингу</a>
+  </div>
+</aside>
+<script>
+(function(){
+  var body=document.body;
+  function open(){body.classList.add('fcat-open')}
+  function close(){body.classList.remove('fcat-open')}
+  document.getElementById('fcat-toggle').addEventListener('click',open);
+  document.getElementById('fcat-close').addEventListener('click',close);
+  document.getElementById('fcat-backdrop').addEventListener('click',close);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
+  var path=window.location.pathname;
+  document.querySelectorAll('.fcat-link').forEach(function(a){
+    if(a.getAttribute('href')===path)a.classList.add('active');
+  });
+})();
+</script>
 </body>
 </html>
