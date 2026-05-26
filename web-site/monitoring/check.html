@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Діагностика · ПрофОсвіта Луганщини</title>
+<meta name="robots" content="noindex,nofollow">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<style>
+  body { font-family: Inter, system-ui, sans-serif; color: #0e1a3a; background: #f8fafc; }
+  .check { display:flex; align-items:center; gap:.6rem; padding:.7rem 1rem; border:1px solid #e2e8f0; border-radius:.55rem; background:#fff; margin-bottom:.5rem; font-size:.95rem; }
+  .check .ic { width:1.5rem; height:1.5rem; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; color:#fff; flex-shrink:0; }
+  .check.ok .ic { background:#15803d; }
+  .check.warn .ic { background:#e0922e; }
+  .check.err .ic { background:#dc2626; }
+  .check.pending .ic { background:#94a3b8; }
+  .check b { color:#0e1a3a; }
+  .check .det { color:#64748b; font-size:.85rem; margin-left:auto; }
+  table.diag { width:100%; border-collapse:collapse; font-size:.9rem; margin-top:.8rem; }
+  table.diag th { background:#f1f5f9; padding:.5rem .7rem; font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; text-align:left; border-bottom:2px solid #cbd5e1; }
+  table.diag td { padding:.5rem .7rem; border-bottom:1px solid #e2e8f0; }
+  table.diag tr.ok td { color:#15803d; }
+  table.diag tr.empty td { color:#94a3b8; }
+</style>
+</head>
+<body>
+
+<div class="bg-brand-blue-deep text-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between text-sm">
+    <div class="flex items-center gap-3">
+      <a href="/" class="text-white/80 hover:text-white">← На головну</a>
+      <span class="text-white/40">·</span>
+      <a href="/monitoring/" class="text-white/80 hover:text-white">Моніторинг</a>
+      <span class="text-white/40">·</span>
+      <span class="font-semibold">Діагностика</span>
+    </div>
+  </div>
+</div>
+
+<main class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+  <h1 class="text-3xl font-bold text-ink mb-2">Діагностика інтеграції з хмарою</h1>
+  <p class="text-slate-600 mb-6">Ця сторінка перевіряє стан з'єднання з Supabase, ваш обліковий запис і кількість записів у БД для вашого закладу.</p>
+
+  <section class="mb-6">
+    <h2 class="text-sm font-bold uppercase tracking-wider text-slate-700 mb-3">Перевірки</h2>
+    <div id="checks-list"></div>
+  </section>
+
+  <section class="mb-6">
+    <h2 class="text-sm font-bold uppercase tracking-wider text-slate-700 mb-3">Записи у Supabase для вашого закладу</h2>
+    <div id="reports-status" class="text-sm text-slate-500">Завантаження…</div>
+  </section>
+
+  <section class="mb-6">
+    <h2 class="text-sm font-bold uppercase tracking-wider text-slate-700 mb-3">localStorage цього браузера</h2>
+    <div id="ls-status" class="text-sm text-slate-500">—</div>
+  </section>
+
+  <section class="mb-6">
+    <h2 class="text-sm font-bold uppercase tracking-wider text-slate-700 mb-3">Що робити, якщо записи відсутні</h2>
+    <ol class="list-decimal pl-6 space-y-2 text-sm text-slate-700 leading-relaxed">
+      <li>Якщо <b>«Записи у Supabase»</b> показує 0 для якоїсь форми — це означає, що ця форма не була подана з цього облікового запису. Перевірте, чи попередні дії на іншому комп'ютері були завершені кнопкою <b>«Зберегти чернетку»</b> або <b>«Відправити»</b>.</li>
+      <li>Якщо у localStorage є дані, але у Supabase 0 — означає, що Supabase save мовчки не спрацював. Відкрийте DevTools → Console на формі і подивіться чи є помилки.</li>
+      <li>Якщо обліковий запис не прив'язано до закладу (червоний ⚠) — координатор НМЦ ПТО має оновити ваш <code>user_metadata.institution_id</code> у Supabase Auth.</li>
+    </ol>
+  </section>
+</main>
+
+<script type="module">
+import { sb, getSession, refreshUserMeta, getInstitution } from '/assets/js/supabase-client.js';
+
+const FORM_CODES = ['1.1','1.2','1.3','1.4','1.5','1.6','1.7','2.1','2.2','3.1','3.2','3.3','3.4','3.5'];
+const FORM_NAMES = {
+  '1.1':'Контингент за регіональним замовленням',
+  '1.2':'Контингент за статтю та віком',
+  '1.3':'Соціально вразливі категорії',
+  '1.4':'Місце перебування здобувачів',
+  '1.5':'Перелік професій',
+  '1.6':'Випуск та працевлаштування',
+  '1.7':'Відсів контингенту',
+  '2.1':'Аналіз ДКР',
+  '2.2':'Аналіз результатів',
+  '3.1':'Кількісний склад педпрацівників',
+  '3.2':'Склад за статтю/віком/стажем',
+  '3.3':'Місце перебування педпрацівників',
+  '3.4':'Атестація',
+  '3.5':'Якісний склад'
+};
+const STORAGE_KEYS = {
+  '1.1':'kontingent_entries_v1',
+  '1.2':'kontingent_age_v1',
+  '1.3':'kontingent_social_v1',
+  '1.4':'kontingent_location_v1',
+  '1.5':'kontingent_professions_v1',
+  '1.6':'kontingent_employment_v1',
+  '1.7':'kontingent_dropout_v1',
+  '2.1':'kontingent_dkr_v1',
+  '2.2':'kontingent_edu_results_v1',
+  '3.1':'kontingent_staff_v1',
+  '3.2':'kontingent_staff_demo_v1',
+  '3.3':'pedstaff_location_v1',
+  '3.4':'pedstaff_attestation_v1',
+  '3.5':'kontingent_staff_quality_v1'
+};
+
+function check(type, title, det) {
+  const div = document.createElement('div');
+  div.className = 'check ' + type;
+  const icon = type === 'ok' ? '✓' : type === 'warn' ? '⚠' : type === 'err' ? '✕' : '…';
+  div.innerHTML = `<span class="ic">${icon}</span><b>${title}</b>` + (det ? `<span class="det">${det}</span>` : '');
+  document.getElementById('checks-list').appendChild(div);
+}
+
+async function run() {
+  /* 1. Connection to Supabase */
+  try {
+    const { data } = await sb.from('institutions').select('count');
+    check('ok', 'Зв\'язок з Supabase', 'працює');
+  } catch (e) {
+    check('err', 'Зв\'язок з Supabase', e.message);
+    return;
+  }
+
+  /* 2. Auth session */
+  const session = await getSession();
+  if (!session) {
+    check('warn', 'Сесія Auth', 'не залогінено — увійдіть');
+    document.getElementById('reports-status').innerHTML = '<div class="text-amber-700">Необхідно увійти у кабінет ЗПО, щоб побачити записи.</div>';
+    return;
+  }
+  check('ok', 'Сесія Auth активна', session.user.email);
+
+  /* 3. Refresh metadata */
+  await refreshUserMeta();
+  const { data: userData } = await sb.auth.getUser();
+  const meta = userData?.user?.user_metadata || {};
+
+  if (!meta.institution_id) {
+    check('err', 'institution_id у JWT', 'ВІДСУТНІЙ — координатор має оновити ваш профіль');
+    document.getElementById('reports-status').innerHTML = '<div class="text-red-700">Без institution_id RLS блокує доступ до записів.</div>';
+    return;
+  }
+  check('ok', 'institution_id у JWT', meta.institution_id);
+
+  if (meta.role === 'admin') {
+    check('ok', 'Роль', 'admin (бачите всі записи всіх закладів)');
+  } else {
+    check('ok', 'Роль', 'заклад освіти');
+  }
+
+  /* 4. Institution data */
+  const inst = await getInstitution();
+  if (inst) {
+    check('ok', 'Заклад завантажено', `${inst.short_name} · ${inst.director || ''}`);
+  } else {
+    check('err', 'Заклад завантажено', `id="${meta.institution_id}" не знайдено у таблиці institutions`);
+  }
+
+  /* 5. Records per form */
+  try {
+    const { data: reports, error } = await sb.from('reports').select('form_code, year, status, updated_at').order('form_code');
+    if (error) throw error;
+
+    const byForm = {};
+    (reports || []).forEach(r => {
+      if (!byForm[r.form_code]) byForm[r.form_code] = [];
+      byForm[r.form_code].push(r);
+    });
+
+    let html = '<table class="diag"><thead><tr><th>Код</th><th>Назва форми</th><th>Записів</th><th>Останнє оновлення</th></tr></thead><tbody>';
+    let total = 0;
+    FORM_CODES.forEach(code => {
+      const rows = byForm[code] || [];
+      total += rows.length;
+      const last = rows.length ? new Date(Math.max(...rows.map(r => new Date(r.updated_at)))).toLocaleString('uk-UA') : '—';
+      const cls = rows.length ? 'ok' : 'empty';
+      html += `<tr class="${cls}"><td><b>${code}</b></td><td>${FORM_NAMES[code]}</td><td>${rows.length}</td><td>${last}</td></tr>`;
+    });
+    html += `</tbody></table><div class="mt-3 text-sm text-slate-600"><b>Загалом записів:</b> ${total} (за всі роки)</div>`;
+    document.getElementById('reports-status').innerHTML = html;
+  } catch (err) {
+    document.getElementById('reports-status').innerHTML = `<div class="text-red-700">Помилка: ${err.message}</div>`;
+  }
+
+  /* 6. localStorage */
+  let lsHtml = '<table class="diag"><thead><tr><th>Код</th><th>Ключ localStorage</th><th>Записів</th></tr></thead><tbody>';
+  let lsTotal = 0;
+  FORM_CODES.forEach(code => {
+    const key = STORAGE_KEYS[code];
+    let count = 0;
+    try { count = JSON.parse(localStorage.getItem(key) || '[]').length; } catch {}
+    lsTotal += count;
+    const cls = count ? 'ok' : 'empty';
+    lsHtml += `<tr class="${cls}"><td><b>${code}</b></td><td><code class="text-xs">${key}</code></td><td>${count}</td></tr>`;
+  });
+  lsHtml += `</tbody></table><div class="mt-3 text-sm text-slate-600"><b>Локальних записів у цьому браузері:</b> ${lsTotal}</div>`;
+  document.getElementById('ls-status').innerHTML = lsHtml;
+}
+
+run();
+</script>
+
+<script type="module" src="/assets/js/header-auth.js"></script>
+</body>
+</html>
