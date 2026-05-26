@@ -205,6 +205,16 @@
 
   .fc-title{font-size:1rem;font-weight:600;line-height:1.3;color:#0e1a3a;margin-bottom:.4rem}
   .fc-desc{font-size:.83rem;color:#64748b;line-height:1.45}
+  .fc-progress{
+    margin-top:.7rem;padding-top:.6rem;border-top:1px dashed #e2e8f0;
+    display:flex;align-items:center;gap:.5rem;
+    font-size:.75rem;color:#64748b;font-weight:600;letter-spacing:.02em;
+  }
+  .fc-progress-bar{flex:1;height:5px;background:#f1f5f9;border-radius:999px;overflow:hidden}
+  .fc-progress-bar > span{display:block;height:100%;border-radius:999px;transition:width .35s ease;background:#15803d;width:0%}
+  .fc-progress-bar.low > span{background:#dc2626}
+  .fc-progress-bar.mid > span{background:#e0922e}
+  .fc-progress.empty{color:#cbd5e1}
 
   /* Інструкційний блок */
   .howto{
@@ -398,7 +408,7 @@
         <div class="sb-body">
           <div class="form-grid">
 
-            <a href="/monitoring/forms/1-1-kontingent.html" class="form-card blue">
+            <a data-form-code="1.1" href="/monitoring/forms/1-1-kontingent.html" class="form-card blue">
               <div class="fc-head">
                 <span class="fc-num blue">1.1</span>
                 <span class="fc-icon blue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
@@ -408,7 +418,7 @@
               <div class="fc-desc">Структура контингенту здобувачів освіти за категоріями регіонального замовлення.</div>
             </a>
 
-            <a href="/monitoring/forms/1-2-kontingent-stat-vik.html" class="form-card blue">
+            <a data-form-code="1.2" href="/monitoring/forms/1-2-kontingent-stat-vik.html" class="form-card blue">
               <div class="fc-head">
                 <span class="fc-num blue">1.2</span>
                 <span class="fc-icon blue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg></span>
@@ -418,7 +428,7 @@
               <div class="fc-desc">Розподіл здобувачів освіти за статтю та віковими групами.</div>
             </a>
 
-            <a href="/monitoring/forms/1-3-socialno-vrazlyvi.html" class="form-card blue">
+            <a data-form-code="1.3" href="/monitoring/forms/1-3-socialno-vrazlyvi.html" class="form-card blue">
               <div class="fc-head">
                 <span class="fc-num blue">1.3</span>
                 <span class="fc-icon blue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
@@ -428,7 +438,7 @@
               <div class="fc-desc">Облік здобувачів освіти з 10 соціально вразливих категорій.</div>
             </a>
 
-            <a href="/monitoring/forms/1-4-misce-perebuvannia.html" class="form-card blue">
+            <a data-form-code="1.4" href="/monitoring/forms/1-4-misce-perebuvannia.html" class="form-card blue">
               <div class="fc-head">
                 <span class="fc-num blue">1.4</span>
                 <span class="fc-icon blue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-8 8-14a8 8 0 1 0-16 0c0 6 8 14 8 14z"/><circle cx="12" cy="8" r="3"/></svg></span>
@@ -438,7 +448,7 @@
               <div class="fc-desc">Розподіл здобувачів за місцем перебування — Україна, закордон, ТОТ.</div>
             </a>
 
-            <a href="/monitoring/forms/1-5-perelik-profesiy.html" class="form-card blue">
+            <a data-form-code="1.5" href="/monitoring/forms/1-5-perelik-profesiy.html" class="form-card blue">
               <div class="fc-head">
                 <span class="fc-num blue">1.5</span>
                 <span class="fc-icon blue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span>
@@ -448,7 +458,7 @@
               <div class="fc-desc">Професії та терміни підготовки кадрів у закладі освіти.</div>
             </a>
 
-            <a href="/monitoring/forms/1-6-vypusk-pratsevlashtuvannia.html" class="form-card blue">
+            <a data-form-code="1.6" href="/monitoring/forms/1-6-vypusk-pratsevlashtuvannia.html" class="form-card blue">
               <div class="fc-head">
                 <span class="fc-num blue">1.6</span>
                 <span class="fc-icon blue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
@@ -458,7 +468,7 @@
               <div class="fc-desc">Підсумки випуску та працевлаштування здобувачів освіти.</div>
             </a>
 
-            <a href="/monitoring/forms/1-7-vidsiv-kontyngentu.html" class="form-card blue">
+            <a data-form-code="1.7" href="/monitoring/forms/1-7-vidsiv-kontyngentu.html" class="form-card blue">
               <div class="fc-head">
                 <span class="fc-num blue">1.7</span>
                 <span class="fc-icon blue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 11 19 13 23 9"/><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg></span>
@@ -485,7 +495,7 @@
         <div class="sb-body">
           <div class="form-grid">
 
-            <a href="/monitoring/forms/2-1-analiz-dkr.html" class="form-card green">
+            <a data-form-code="2.1" href="/monitoring/forms/2-1-analiz-dkr.html" class="form-card green">
               <div class="fc-head">
                 <span class="fc-num green">2.1</span>
                 <span class="fc-icon green"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13h6M9 17h6"/></svg></span>
@@ -495,7 +505,7 @@
               <div class="fc-desc">Результати вхідних ДКР та оцінок свідоцтв БСО з 4 предметів.</div>
             </a>
 
-            <a href="/monitoring/forms/2-2-analiz-rezultativ.html" class="form-card green">
+            <a data-form-code="2.2" href="/monitoring/forms/2-2-analiz-rezultativ.html" class="form-card green">
               <div class="fc-head">
                 <span class="fc-num green">2.2</span>
                 <span class="fc-icon green"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg></span>
@@ -522,7 +532,7 @@
         <div class="sb-body">
           <div class="form-grid">
 
-            <a href="/monitoring/forms/3-1-pedpracivnyky.html" class="form-card deep">
+            <a data-form-code="3.1" href="/monitoring/forms/3-1-pedpracivnyky.html" class="form-card deep">
               <div class="fc-head">
                 <span class="fc-num deep">3.1</span>
                 <span class="fc-icon deep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
@@ -532,7 +542,7 @@
               <div class="fc-desc">Загальна кількість педагогічних працівників за категоріями.</div>
             </a>
 
-            <a href="/monitoring/forms/3-2-pedpracivnyky-sklad.html" class="form-card deep">
+            <a data-form-code="3.2" href="/monitoring/forms/3-2-pedpracivnyky-sklad.html" class="form-card deep">
               <div class="fc-head">
                 <span class="fc-num deep">3.2</span>
                 <span class="fc-icon deep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
@@ -542,7 +552,7 @@
               <div class="fc-desc">Демографічна структура педагогічних кадрів закладу.</div>
             </a>
 
-            <a href="/monitoring/forms/3-3-misce-pedpracivnyky.html" class="form-card deep">
+            <a data-form-code="3.3" href="/monitoring/forms/3-3-misce-pedpracivnyky.html" class="form-card deep">
               <div class="fc-head">
                 <span class="fc-num deep">3.3</span>
                 <span class="fc-icon deep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-8 8-14a8 8 0 1 0-16 0c0 6 8 14 8 14z"/><circle cx="12" cy="8" r="3"/></svg></span>
@@ -552,7 +562,7 @@
               <div class="fc-desc">Розподіл педагогічних працівників за місцем перебування.</div>
             </a>
 
-            <a href="/monitoring/forms/3-4-atestaciya.html" class="form-card deep">
+            <a data-form-code="3.4" href="/monitoring/forms/3-4-atestaciya.html" class="form-card deep">
               <div class="fc-head">
                 <span class="fc-num deep">3.4</span>
                 <span class="fc-icon deep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg></span>
@@ -562,7 +572,7 @@
               <div class="fc-desc">Результати атестації — підтвердження та присвоєння категорій і звань.</div>
             </a>
 
-            <a href="/monitoring/forms/3-5-yakisnyy-sklad.html" class="form-card deep">
+            <a data-form-code="3.5" href="/monitoring/forms/3-5-yakisnyy-sklad.html" class="form-card deep">
               <div class="fc-head">
                 <span class="fc-num deep">3.5</span>
                 <span class="fc-icon deep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
@@ -753,5 +763,51 @@ document.getElementById('mobile-menu-toggle').addEventListener('click', () => {
 
 <script src="/assets/js/main.js" defer></script>
 <script type="module" src="/assets/js/header-auth.js"></script>
+
+<!-- ═══ ПУБЛІЧНА АНАЛІТИКА: прогрес виконання форм ═══ -->
+<script type="module">
+import { sb } from '/assets/js/supabase-client.js';
+
+const TOTAL_INSTITUTIONS = 9;
+const YEAR = new Date().getFullYear(); // показуємо поточний рік (динамічно)
+
+async function loadPublicStats() {
+  try {
+    const { data, error } = await sb.from('public_reports_agg')
+      .select('form_code, year, total, submitted')
+      .eq('year', YEAR);
+    if (error) throw error;
+
+    const byForm = {};
+    (data || []).forEach(r => { byForm[r.form_code] = r; });
+
+    document.querySelectorAll('a.form-card[data-form-code]').forEach(card => {
+      const code = card.dataset.formCode;
+      const stats = byForm[code];
+      const submitted = stats ? stats.submitted : 0;
+      const total = TOTAL_INSTITUTIONS;
+      const percent = Math.round((submitted / total) * 100);
+
+      const isEmpty = submitted === 0;
+      let cls = '';
+      if (!isEmpty) {
+        if (percent < 33) cls = 'low';
+        else if (percent < 70) cls = 'mid';
+      }
+
+      const div = document.createElement('div');
+      div.className = 'fc-progress' + (isEmpty ? ' empty' : '');
+      div.innerHTML = isEmpty
+        ? `<span>За ${YEAR}: ще не подано</span><div class="fc-progress-bar"><span style="width:0%"></span></div>`
+        : `<span>${YEAR}: ${submitted}/${total}</span><div class="fc-progress-bar ${cls}"><span style="width:${percent}%"></span></div><span style="min-width:28px;text-align:right">${percent}%</span>`;
+      card.appendChild(div);
+    });
+  } catch (err) {
+    console.warn('public stats:', err.message || err);
+  }
+}
+
+loadPublicStats();
+</script>
 </body>
 </html>
