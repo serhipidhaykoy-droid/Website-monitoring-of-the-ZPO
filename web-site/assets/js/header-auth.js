@@ -1,63 +1,63 @@
-/* header-auth.js — для публічних сторінок порталу.
+/* header-auth.js — для всіх 21 сторінок (публічних + 14 форм).
    Якщо користувач авторизований через Supabase Auth, додає кнопку «Вийти»
-   у header поруч/під кнопкою «Кабінет ЗПО».
+   ОДРАЗУ ПІСЛЯ кожного посилання «Кабінет ЗПО».
 
-   Підключається як ES-module на всіх 7 публічних сторінках:
-     <script type="module" src="/assets/js/header-auth.js"></script>
+   Працює у двох контекстах:
+   - Публічні сторінки: header з Tailwind-класами (.hidden md:inline-flex)
+   - Форми моніторингу: верхня синя смуга з inline-стилями
 */
 
 import { getSession, signOut } from '/assets/js/supabase-client.js';
-
-const LOGOUT_BTN_ID = 'hdr-logout-btn';
-const LOGOUT_MOBILE_ID = 'hdr-logout-mobile';
-
-function makeLogoutDesktopBtn() {
-  const a = document.createElement('a');
-  a.id = LOGOUT_BTN_ID;
-  a.href = '#';
-  a.className = 'hidden md:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors';
-  a.innerHTML =
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">' +
-    '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>' +
-    '<polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>' +
-    'Вийти';
-  a.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (confirm('Вийти з кабінету ЗПО?')) signOut('/');
-  });
-  return a;
-}
-
-function makeLogoutMobileLink() {
-  const a = document.createElement('a');
-  a.id = LOGOUT_MOBILE_ID;
-  a.href = '#';
-  a.className = 'nav-link mt-1 text-red-600 font-semibold';
-  a.textContent = '→ Вийти з кабінету';
-  a.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (confirm('Вийти з кабінету ЗПО?')) signOut('/');
-  });
-  return a;
-}
 
 async function init() {
   const session = await getSession();
   if (!session) return; // не залогінений — нічого не робимо
 
-  /* 1) Desktop: вставити кнопку «Вийти» одразу ПІСЛЯ «Кабінет ЗПО» */
-  const cabinetBtn = document.querySelector('header a[href="/monitoring/login.html"]');
-  if (cabinetBtn && !document.getElementById(LOGOUT_BTN_ID)) {
-    const logout = makeLogoutDesktopBtn();
-    cabinetBtn.parentNode.insertBefore(logout, cabinetBtn.nextSibling);
-  }
+  /* 1) Вставити кнопку «Вийти» після кожного «Кабінет ЗПО» */
+  document.querySelectorAll('a[href="/monitoring/login.html"]').forEach((link) => {
+    if (link.dataset.logoutAdded) return;
+    link.dataset.logoutAdded = '1';
 
-  /* 2) Mobile menu: додати рядок «Вийти з кабінету» у #mobile-menu */
-  const mobileMenu = document.getElementById('mobile-menu');
-  if (mobileMenu && !document.getElementById(LOGOUT_MOBILE_ID)) {
-    const container = mobileMenu.querySelector('.flex.flex-col') || mobileMenu;
-    container.appendChild(makeLogoutMobileLink());
-  }
+    const logout = document.createElement('a');
+    logout.href = '#';
+    logout.title = 'Вийти з кабінету ЗПО';
+
+    // Визначаємо контекст: чи це inline-стилі (форми) чи Tailwind (публічні)
+    const isInlineCtx = link.style.cssText.length > 0;
+    const isInMobileMenu = !!link.closest('#mobile-menu');
+
+    if (isInlineCtx) {
+      // Контекст form'и (верхня синя смуга з inline-стилями)
+      logout.style.cssText =
+        'color:#fff;background:#dc2626;text-decoration:none;font-weight:600;' +
+        'padding:4px 12px;border-radius:5px;margin-left:10px;font-size:13px;' +
+        'display:inline-flex;align-items:center;gap:5px';
+      logout.innerHTML =
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">' +
+        '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>' +
+        '<polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>Вийти';
+    } else if (isInMobileMenu) {
+      // Mobile menu (вертикальний список)
+      logout.className = 'nav-link mt-1 text-red-600 font-semibold';
+      logout.textContent = '→ Вийти з кабінету';
+    } else {
+      // Контекст header (Tailwind), Desktop
+      logout.className =
+        'hidden md:inline-flex items-center gap-2 ml-2 px-4 py-2 text-sm ' +
+        'font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors';
+      logout.innerHTML =
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">' +
+        '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>' +
+        '<polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>Вийти';
+    }
+
+    logout.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (confirm('Вийти з кабінету ЗПО?')) signOut('/');
+    });
+
+    link.parentNode.insertBefore(logout, link.nextSibling);
+  });
 }
 
 if (document.readyState === 'loading') {
