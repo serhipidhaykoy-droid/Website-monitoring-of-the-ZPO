@@ -537,6 +537,15 @@ const SHORT_NAMES = [
 ];
 const YEARS = [2022, 2023, 2024, 2025, 2026, 2027];
 const STORAGE_KEY = 'kontingent_age_v1';
+
+const FORM_CODE = '1.2';
+let __sbModule = null;
+async function getSb() {
+  if (__sbModule !== null) return __sbModule;
+  try { __sbModule = await import('/assets/js/supabase-client.js'); }
+  catch (e) { __sbModule = false; }
+  return __sbModule;
+}
 const MAX_VALUE = 100000;
 const FONT_FAMILY = '"Times New Roman", Times, Georgia, serif';
 
@@ -850,6 +859,15 @@ function persist(status){
   };
   State.entries=State.entries.filter(e=>e.id!==id).concat(entry);
   saveEntries();
+  /* Supabase cloud sync */
+  (async () => {
+    const m = await getSb();
+    if (!m) return;
+    const s = await m.getSession();
+    if (!s) return;
+    try { await m.saveReport(FORM_CODE, entry.year, entry, status); }
+    catch (err) { showToast('err', 'Хмарне збереження не вдалося: ' + (err.message || err)); }
+  })();
   showToast('ok', status==='submitted' ? 'Дані перевірено, відправлено та збережено ✓' : 'Чернетку збережено ✓');
 
   if(status==='submitted'){
@@ -1174,6 +1192,26 @@ function exportExcel(){
 }
 
 /* ═══════════════════════════════════════════════════════════ */
+async function loadCloudReports() {
+  const m = await getSb();
+  if (!m) return;
+  const s = await m.getSession();
+  if (!s) return;
+  try {
+    const { data, error } = await m.sb.from('reports')
+      .select('year, status, data, updated_at')
+      .eq('form_code', FORM_CODE);
+    if (error) throw error;
+    if (!data || !data.length) return;
+    State.entries = data.map(r => Object.assign({}, r.data, {
+      year: r.year, status: r.status, ts: new Date(r.updated_at).getTime()
+    }));
+    if (typeof renderResults === 'function') renderResults();
+    if (typeof updateEntriesCount === 'function') updateEntriesCount();
+  } catch (err) { console.warn('loadCloudReports:', err.message || err); }
+}
+setTimeout(loadCloudReports, 500);
+
 init();
 </script>
 
