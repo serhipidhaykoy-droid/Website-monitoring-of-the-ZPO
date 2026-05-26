@@ -1,0 +1,36 @@
+# Netlify конфігурація — сайт деплоїться з папки web-site/
+# Сайт після деплою буде доступний за URL виду https://<project>.netlify.app/
+#
+# Інструкція з підключення:
+# 1) Відкрити https://app.netlify.com/start
+# 2) Connect to Git provider → GitHub → авторизуватись
+# 3) Pick repository: Website-monitoring-of-the-ZPO
+# 4) Netlify автоматично прочитає цей netlify.toml і налаштує все
+# 5) Deploy site → через 1-2 хв сайт буде доступний за виданим URL
+
+[build]
+  publish = "web-site"
+  command = ""
+
+# Усі неіснуючі шляхи повертають index.html (для SPA-навігації або 404-handling)
+# Не потрібно для нашого статичного сайту з реальними папками, тому коментуємо:
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
+
+# Кешування статичних assets
+[[headers]]
+  for = "/assets/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/assets/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
