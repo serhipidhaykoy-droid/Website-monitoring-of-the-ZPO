@@ -534,6 +534,16 @@ const YEARS = [2022, 2023, 2024, 2025, 2026, 2027];
 const STORAGE_KEY = 'kontingent_location_v1';
 const MAX_VALUE = 100000;
 const FONT_FAMILY = '"Times New Roman", Times, Georgia, serif';
+const FORM_CODE = '1.4';
+
+/* Динамічне підключення Supabase-клієнта (ES-module). */
+let __sbModule = null;
+async function getSb() {
+  if (__sbModule !== null) return __sbModule;
+  try { __sbModule = await import('/assets/js/supabase-client.js'); }
+  catch (e) { __sbModule = false; console.warn('Supabase client unavailable:', e.message); }
+  return __sbModule;
+}
 
 const C = {
   blue:'#1d4ed8', blueDeep:'#16357a', blueBright:'#3b82f6',
@@ -765,6 +775,23 @@ function persist(status){
   State.entries=State.entries.filter(e=>e.id!==id).concat(entry);
   saveEntries();
   showToast('ok', status==='submitted' ? 'Дані перевірено, відправлено та збережено ✓' : 'Чернетку збережено ✓');
+
+  /* Хмарне збереження у Supabase (для авторизованих закладів) */
+  (async () => {
+    const m = await getSb();
+    if (!m) return;
+    const session = await m.getSession();
+    if (!session) return;
+    try {
+      await m.saveReport(FORM_CODE, f.year, {
+        institution: f.institution,
+        ukraine: f.ukraine, abroad: f.abroad, occupied: f.occupied,
+        total, pU: entry.pU, pA: entry.pA, pO: entry.pO
+      }, status);
+    } catch (err) {
+      showToast('err', 'Хмарне збереження не вдалося: ' + (err.message || err));
+    }
+  })();
 
   if(status==='submitted'){
     $('#f-institution').value='';
@@ -1023,6 +1050,42 @@ function exportExcel(){
 
 /* ═══════════════════════════════════════════════════════════ */
 init();
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  ЗАВАНТАЖЕННЯ ЗВІТІВ З SUPABASE (для авторизованих закладів) */
+/* ═══════════════════════════════════════════════════════════ */
+async function loadCloudReports(){
+  const m = await getSb();
+  if (!m) return;
+  const session = await m.getSession();
+  if (!session) return;
+  try {
+    const { data, error } = await m.sb.from('reports')
+      .select('year, status, data, updated_at')
+      .eq('form_code', FORM_CODE);
+    if (error) throw error;
+    if (!data || data.length === 0) return;
+    State.entries = data.map(r => {
+      const d = r.data || {};
+      const instName = d.institution || '';
+      const idx = INSTITUTIONS.indexOf(instName);
+      return {
+        id: `${r.year}_${idx >= 0 ? idx : 0}`,
+        year: r.year, institution: instName, institutionIdx: idx >= 0 ? idx : 0,
+        ukraine: d.ukraine || 0, abroad: d.abroad || 0, occupied: d.occupied || 0,
+        total: d.total || 0,
+        pU: d.pU || 0, pA: d.pA || 0, pO: d.pO || 0,
+        status: r.status, ts: new Date(r.updated_at).getTime()
+      };
+    });
+    renderResults();
+    updateEntriesCount();
+  } catch (err) {
+    console.warn('loadCloudReports error:', err.message || err);
+  }
+}
+/* Виклик з затримкою, щоб form-auth.js встиг встановити заклад у select */
+setTimeout(loadCloudReports, 500);
 </script>
 
 <!-- ═══ КАТАЛОГ ФОРМ МОНІТОРИНГУ — collapsible sidebar ═══ -->
