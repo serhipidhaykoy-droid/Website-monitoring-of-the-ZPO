@@ -75,7 +75,17 @@ async function setupAuthenticated(banner) {
   if (!inst) {
     banner.style.background = '#fef3c7';
     banner.style.color = '#854d0e';
-    banner.innerHTML = '⚠ Авторизовано, але обліковий запис не прив\'язано до закладу. Зверніться до координатора НМЦ ПТО.';
+    banner.innerHTML =
+      '<span>⚠ Обліковий запис не прив\'язано до закладу. Якщо адміністратор щойно оновив дані, ' +
+      'спробуйте <a href="#" id="auth-relogin" style="text-decoration:underline;font-weight:600;color:currentColor">вийти і знову увійти</a>. ' +
+      'Інакше зверніться до координатора НМЦ ПТО.</span>' +
+      '<a href="#" id="auth-signout-2" style="background:#16357a;color:#fff;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600">Вийти</a>';
+    document.getElementById('auth-relogin')?.addEventListener('click', (e) => {
+      e.preventDefault(); signOut('/monitoring/login.html?next=' + encodeURIComponent(location.pathname));
+    });
+    document.getElementById('auth-signout-2')?.addEventListener('click', (e) => {
+      e.preventDefault(); signOut('/monitoring/login.html');
+    });
     return;
   }
   banner.style.background = '#dcfce7';

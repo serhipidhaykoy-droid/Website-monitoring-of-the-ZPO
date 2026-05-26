@@ -20,8 +20,38 @@ export async function getSession() {
   return data.session;
 }
 
-/** Повертає institution_id з user_metadata або null. */
+/** Один раз за сторінку — освіжає сесію та user_metadata з сервера.
+   Це потрібно після того як адмін оновив raw_user_meta_data у БД —
+   локальний JWT застарів і не містить institution_id, доки не зробити refresh. */
+let __refreshed = false;
+export async function refreshUserMeta() {
+  if (__refreshed) return;
+  __refreshed = true;
+  try {
+    // Спочатку fetch свіжих даних користувача з сервера (без зміни JWT)
+    const { data: { user } } = await sb.auth.getUser();
+    if (!user) return;
+    // Якщо у локальному JWT нема institution_id, але в БД він є — оновлюємо JWT
+    const localSession = await getSession();
+    const jwtMeta = localSession?.user?.user_metadata || {};
+    const serverMeta = user.user_metadata || {};
+    if (!jwtMeta.institution_id && serverMeta.institution_id) {
+      await sb.auth.refreshSession();
+    }
+  } catch (e) {
+    console.warn('refreshUserMeta:', e.message);
+  }
+}
+
+/** Повертає institution_id з user_metadata або null.
+   Спочатку перевіряє свіжий user object (з сервера), потім JWT. */
 export async function getInstitutionId() {
+  await refreshUserMeta();
+  try {
+    const { data: { user } } = await sb.auth.getUser();
+    const fromServer = user?.user_metadata?.institution_id;
+    if (fromServer) return fromServer;
+  } catch (e) { /* fallback */ }
   const session = await getSession();
   return session?.user?.user_metadata?.institution_id ?? null;
 }
