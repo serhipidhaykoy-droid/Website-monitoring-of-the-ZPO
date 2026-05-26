@@ -62,6 +62,12 @@ create policy "Institution manages own reports"
   using       (institution_id = (auth.jwt() -> 'user_metadata' ->> 'institution_id'))
   with check  (institution_id = (auth.jwt() -> 'user_metadata' ->> 'institution_id'));
 
+-- Адмін НМЦ ПТО (role='admin' у user_metadata) — читає ВСІ reports усіх закладів
+drop policy if exists "Admin reads all reports" on reports;
+create policy "Admin reads all reports"
+  on reports for select to authenticated
+  using ((auth.jwt() -> 'user_metadata' ->> 'role') = 'admin');
+
 -- ─── ПУБЛІЧНА АНАЛІТИКА (агреговані дані без розкриття) ────────────────────
 drop view if exists public_reports_agg;
 create view public_reports_agg as

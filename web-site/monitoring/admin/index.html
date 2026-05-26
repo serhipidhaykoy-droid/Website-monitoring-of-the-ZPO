@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Адмін-панель НМЦ ПТО — перегляд звітів усіх закладів освіти Луганщини.">
+<meta name="robots" content="noindex,nofollow">
+<title>Адмін-панель · ПрофОсвіта Луганщини</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      'brand-blue':  { DEFAULT:'#1d4ed8', deep:'#16357a', soft:'#e8eefb' },
+      'brand-green': { DEFAULT:'#15803d', bright:'#22c55e', soft:'#e1f5ee' },
+      'ink': '#0e1a3a',
+    },
+    fontFamily: { sans: ['Inter','system-ui','sans-serif'], serif: ['Lora','Georgia','serif'] },
+  }}
+}
+</script>
+
+<style>
+  body { font-family: Inter, system-ui, sans-serif; color: #0e1a3a; background: #f8fafc; }
+  .badge { display:inline-flex; align-items:center; gap:.3rem; padding:.18rem .55rem; font-size:.72rem; font-weight:600; border-radius:999px; letter-spacing:.02em; }
+  .badge-draft { background:#fef3c7; color:#854d0e; }
+  .badge-submitted { background:#dcfce7; color:#15803d; }
+  table.report-table { width:100%; border-collapse:collapse; font-size:.9rem; }
+  table.report-table th { background:#f1f5f9; color:#0e1a3a; font-weight:700; text-align:left; padding:.7rem .8rem; font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; border-bottom:2px solid #cbd5e1; }
+  table.report-table td { padding:.7rem .8rem; border-bottom:1px solid #e2e8f0; vertical-align:top; }
+  table.report-table tr.row-clickable { cursor:pointer; transition:background .15s; }
+  table.report-table tr.row-clickable:hover { background:#e8eefb; }
+  .modal-overlay { position:fixed; inset:0; background:rgba(13,35,64,.5); z-index:100; display:none; align-items:center; justify-content:center; padding:1rem; }
+  .modal-overlay.open { display:flex; }
+  .modal-card { background:#fff; border-radius:.85rem; max-width:880px; max-height:90vh; width:100%; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 30px 60px -20px rgba(13,35,64,.45); }
+  .modal-head { padding:1.2rem 1.5rem; border-bottom:1px solid #e2e8f0; background:linear-gradient(135deg,#e8eefb,#fff,#e1f5ee); display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
+  .modal-body { padding:1.5rem; overflow-y:auto; }
+  .kv-grid { display:grid; grid-template-columns:max-content 1fr; gap:.6rem 1.2rem; font-size:.9rem; }
+  .kv-grid dt { color:#64748b; font-weight:600; }
+  .kv-grid dd { color:#0e1a3a; font-weight:500; }
+  .matrix { display:grid; grid-template-columns:max-content repeat(auto-fill, minmax(60px, 1fr)); gap:2px; }
+  .matrix-cell { padding:.5rem; background:#fff; border:1px solid #e2e8f0; text-align:center; font-size:.78rem; }
+  .matrix-cell.head { background:#16357a; color:#fff; font-weight:600; }
+  .filter-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:.7rem; }
+  .filter-grid select, .filter-grid input { width:100%; padding:.55rem .8rem; border:1.5px solid #e2e8f0; border-radius:.5rem; font-size:.9rem; }
+  .stat-card { padding:1rem 1.2rem; background:#fff; border:1px solid #e2e8f0; border-radius:.7rem; }
+  .stat-card .v { font-family:Lora,serif; font-size:2rem; font-weight:600; line-height:1; }
+  .stat-card .l { font-size:.78rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:.06em; margin-top:.4rem; }
+</style>
+</head>
+<body>
+
+<!-- ════════ ШАПКА ════════ -->
+<div class="bg-brand-blue-deep text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between text-sm">
+    <div class="flex items-center gap-3">
+      <a href="/" class="text-white/80 hover:text-white">← На головну</a>
+      <span class="text-white/40">·</span>
+      <a href="/monitoring/" class="text-white/80 hover:text-white">Моніторинг</a>
+      <span class="text-white/40">·</span>
+      <span class="font-semibold">Адмін-панель</span>
+    </div>
+    <a href="/monitoring/login.html" id="login-link" class="hidden text-brand-green-bright font-semibold">Увійти</a>
+  </div>
+</div>
+
+<header class="sticky top-0 z-40 bg-white border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-ink">Адмін-панель НМЦ ПТО</h1>
+      <p class="text-sm text-slate-500 mt-0.5">Перегляд звітів усіх закладів освіти Луганщини</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="export-btn" class="hidden md:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-brand-blue hover:bg-brand-blue-deep rounded-lg transition-colors">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Експорт XLSX
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ════════ ОСНОВНИЙ КОНТЕНТ ════════ -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- Auth-перевірка / заборона -->
+  <div id="access-denied" class="hidden bg-amber-50 border border-amber-200 rounded-lg p-6">
+    <h2 class="text-lg font-bold text-amber-900 mb-2">⛔ Доступ обмежено</h2>
+    <p class="text-amber-800 text-sm leading-relaxed">
+      Адмін-панель доступна лише для координаторів НМЦ ПТО з роллю <code class="bg-amber-100 px-1.5 py-0.5 rounded">admin</code>.<br>
+      Якщо ви адміністратор, перевірте, що ваш обліковий запис у Supabase Auth має <code class="bg-amber-100 px-1.5 py-0.5 rounded">{"role":"admin"}</code> у Raw User Meta Data.
+    </p>
+    <a href="/monitoring/login.html" class="mt-4 inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-brand-blue rounded-lg hover:bg-brand-blue-deep">Увійти</a>
+  </div>
+
+  <!-- Основний контент (видимий тільки для адмінів) -->
+  <div id="admin-content" class="hidden space-y-6">
+
+    <!-- Статистика -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="stat-card"><div class="v text-brand-blue" id="stat-total">—</div><div class="l">Усього звітів</div></div>
+      <div class="stat-card"><div class="v text-brand-green" id="stat-submitted">—</div><div class="l">Подано</div></div>
+      <div class="stat-card"><div class="v text-amber-600" id="stat-draft">—</div><div class="l">Чернеток</div></div>
+      <div class="stat-card"><div class="v text-brand-blue-deep" id="stat-institutions">—</div><div class="l">Активних закладів</div></div>
+    </section>
+
+    <!-- Фільтри -->
+    <section class="bg-white border border-slate-200 rounded-xl p-4">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-slate-700 mb-3">Фільтри</h2>
+      <div class="filter-grid">
+        <select id="filter-institution"><option value="">Усі заклади</option></select>
+        <select id="filter-form"><option value="">Усі форми</option></select>
+        <select id="filter-year"><option value="">Усі роки</option></select>
+        <select id="filter-status">
+          <option value="">Усі статуси</option>
+          <option value="submitted">Подано</option>
+          <option value="draft">Чернетка</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Таблиця звітів -->
+    <section class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="report-table" id="reports-table">
+          <thead>
+            <tr>
+              <th>Заклад</th>
+              <th>Форма</th>
+              <th>Рік</th>
+              <th>Статус</th>
+              <th>Оновлено</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="reports-tbody">
+            <tr><td colspan="6" class="text-center py-12 text-slate-500">Завантаження…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- Модалка деталей звіту -->
+<div id="detail-modal" class="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div>
+        <div id="modal-title" class="text-lg font-bold text-ink">—</div>
+        <div id="modal-subtitle" class="text-sm text-slate-500 mt-1">—</div>
+      </div>
+      <button id="modal-close" class="text-slate-500 hover:text-ink p-2" aria-label="Закрити">✕</button>
+    </div>
+    <div class="modal-body">
+      <dl class="kv-grid" id="modal-meta"></dl>
+      <h3 class="font-bold text-ink mt-6 mb-2 text-sm uppercase tracking-wider">Дані звіту</h3>
+      <pre id="modal-data" class="bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs overflow-x-auto"></pre>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { sb, getSession, signOut } from '/assets/js/supabase-client.js';
+
+const FORM_NAMES = {
+  '1.1':'Контингент за регіональним замовленням',
+  '1.2':'Контингент за статтю та віком',
+  '1.3':'Соціально вразливі категорії',
+  '1.4':'Місце перебування здобувачів',
+  '1.5':'Перелік професій підготовки',
+  '1.6':'Випуск та працевлаштування',
+  '1.7':'Відсів контингенту',
+  '2.1':'Аналіз результатів ДКР',
+  '2.2':'Аналіз результатів освітньої діяльності',
+  '3.1':'Кількісний склад педпрацівників',
+  '3.2':'Склад за статтю/віком/стажем',
+  '3.3':'Місце перебування педпрацівників',
+  '3.4':'Підсумки атестації',
+  '3.5':'Якісний склад педпрацівників'
+};
+
+const State = { reports: [], institutions: [], filtered: [] };
+
+const $ = sel => document.querySelector(sel);
+
+function fmtDate(s) {
+  if (!s) return '—';
+  const d = new Date(s);
+  return d.toLocaleString('uk-UA', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function instName(id) {
+  const i = State.institutions.find(x => x.id === id);
+  return i ? (i.short_name || i.name) : id;
+}
+
+function statusBadge(s) {
+  return s === 'submitted'
+    ? '<span class="badge badge-submitted">✓ Подано</span>'
+    : '<span class="badge badge-draft">◯ Чернетка</span>';
+}
+
+function renderRows(rows) {
+  const tbody = $('#reports-tbody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-12 text-slate-500">Записів не знайдено за поточними фільтрами</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(r => `
+    <tr class="row-clickable" data-id="${r.id}">
+      <td><strong>${instName(r.institution_id)}</strong></td>
+      <td>${r.form_code} · <span class="text-slate-500">${FORM_NAMES[r.form_code] || ''}</span></td>
+      <td>${r.year}</td>
+      <td>${statusBadge(r.status)}</td>
+      <td class="text-slate-500 text-xs">${fmtDate(r.updated_at)}</td>
+      <td><span class="text-brand-blue text-xs font-semibold">Деталі →</span></td>
+    </tr>
+  `).join('');
+
+  tbody.querySelectorAll('tr.row-clickable').forEach(tr => {
+    tr.addEventListener('click', () => openDetail(tr.dataset.id));
+  });
+}
+
+function renderStats(rows) {
+  $('#stat-total').textContent = rows.length;
+  $('#stat-submitted').textContent = rows.filter(r => r.status === 'submitted').length;
+  $('#stat-draft').textContent = rows.filter(r => r.status === 'draft').length;
+  $('#stat-institutions').textContent = new Set(rows.map(r => r.institution_id)).size;
+}
+
+function applyFilters() {
+  const inst = $('#filter-institution').value;
+  const form = $('#filter-form').value;
+  const year = $('#filter-year').value;
+  const status = $('#filter-status').value;
+
+  State.filtered = State.reports.filter(r =>
+    (!inst || r.institution_id === inst) &&
+    (!form || r.form_code === form) &&
+    (!year || String(r.year) === year) &&
+    (!status || r.status === status)
+  );
+  renderRows(State.filtered);
+}
+
+function fillFilters() {
+  const instSel = $('#filter-institution');
+  State.institutions.forEach(i => {
+    const o = document.createElement('option');
+    o.value = i.id;
+    o.textContent = i.short_name || i.name;
+    instSel.appendChild(o);
+  });
+
+  const formSel = $('#filter-form');
+  Object.entries(FORM_NAMES).forEach(([code, name]) => {
+    const o = document.createElement('option');
+    o.value = code;
+    o.textContent = code + ' · ' + name;
+    formSel.appendChild(o);
+  });
+
+  const yearSel = $('#filter-year');
+  const years = [...new Set(State.reports.map(r => r.year))].sort();
+  years.forEach(y => {
+    const o = document.createElement('option');
+    o.value = y;
+    o.textContent = y;
+    yearSel.appendChild(o);
+  });
+
+  ['filter-institution','filter-form','filter-year','filter-status'].forEach(id => {
+    $('#'+id).addEventListener('change', applyFilters);
+  });
+}
+
+function openDetail(id) {
+  const r = State.reports.find(x => x.id === id);
+  if (!r) return;
+  $('#modal-title').textContent = `${r.form_code} · ${FORM_NAMES[r.form_code] || ''}`;
+  $('#modal-subtitle').textContent = `${instName(r.institution_id)} · ${r.year} рік`;
+  $('#modal-meta').innerHTML = `
+    <dt>Статус</dt><dd>${statusBadge(r.status)}</dd>
+    <dt>Створено</dt><dd>${fmtDate(r.created_at)}</dd>
+    <dt>Оновлено</dt><dd>${fmtDate(r.updated_at)}</dd>
+    <dt>Подано</dt><dd>${r.submitted_at ? fmtDate(r.submitted_at) : '—'}</dd>
+    <dt>Запис ID</dt><dd class="font-mono text-xs">${r.id}</dd>
+  `;
+  $('#modal-data').textContent = JSON.stringify(r.data, null, 2);
+  $('#detail-modal').classList.add('open');
+}
+
+$('#modal-close').addEventListener('click', () => $('#detail-modal').classList.remove('open'));
+$('#detail-modal').addEventListener('click', e => {
+  if (e.target.id === 'detail-modal') $('#detail-modal').classList.remove('open');
+});
+
+$('#export-btn').addEventListener('click', () => {
+  const rows = State.filtered.length ? State.filtered : State.reports;
+  if (!rows.length) { alert('Немає даних для експорту'); return; }
+  const sheetData = [['Заклад','Форма','Назва форми','Рік','Статус','Створено','Оновлено','Подано','Дані (JSON)']];
+  rows.forEach(r => {
+    sheetData.push([
+      instName(r.institution_id),
+      r.form_code,
+      FORM_NAMES[r.form_code] || '',
+      r.year,
+      r.status,
+      r.created_at,
+      r.updated_at,
+      r.submitted_at || '',
+      JSON.stringify(r.data)
+    ]);
+  });
+  const ws = XLSX.utils.aoa_to_sheet(sheetData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Звіти');
+  XLSX.writeFile(wb, `reports_${new Date().toISOString().slice(0,10)}.xlsx`);
+});
+
+async function init() {
+  const session = await getSession();
+  const role = session?.user?.user_metadata?.role;
+
+  if (!session || role !== 'admin') {
+    $('#access-denied').classList.remove('hidden');
+    $('#login-link').classList.remove('hidden');
+    return;
+  }
+
+  $('#admin-content').classList.remove('hidden');
+
+  try {
+    const [{ data: instData, error: e1 }, { data: repData, error: e2 }] = await Promise.all([
+      sb.from('institutions').select('id, name, short_name'),
+      sb.from('reports').select('*').order('updated_at', { ascending: false })
+    ]);
+    if (e1) throw e1;
+    if (e2) throw e2;
+    State.institutions = instData || [];
+    State.reports = repData || [];
+    State.filtered = [...State.reports];
+    fillFilters();
+    renderStats(State.reports);
+    renderRows(State.filtered);
+  } catch (err) {
+    $('#reports-tbody').innerHTML = `<tr><td colspan="6" class="text-center py-12 text-red-600">Помилка завантаження: ${err.message}</td></tr>`;
+  }
+}
+
+init();
+</script>
+
+<script src="/assets/js/main.js" defer></script>
+<script type="module" src="/assets/js/header-auth.js"></script>
+</body>
+</html>

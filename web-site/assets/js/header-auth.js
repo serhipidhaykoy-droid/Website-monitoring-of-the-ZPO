@@ -13,6 +13,23 @@ async function init() {
   const session = await getSession();
   if (!session) return; // не залогінений — нічого не робимо
 
+  const isAdmin = session.user?.user_metadata?.role === 'admin';
+
+  /* 0) Якщо адмін — додати посилання «Адмін-панель» у header перед «Кабінет ЗПО» */
+  if (isAdmin) {
+    document.querySelectorAll('header a[href="/monitoring/login.html"]').forEach((link) => {
+      if (link.previousElementSibling?.dataset?.adminLink) return;
+      const adminLink = document.createElement('a');
+      adminLink.href = '/monitoring/admin/';
+      adminLink.dataset.adminLink = '1';
+      adminLink.className = 'hidden md:inline-flex items-center gap-2 mr-2 px-4 py-2 text-sm font-semibold text-white bg-brand-blue-deep hover:bg-brand-blue rounded-lg transition-colors';
+      adminLink.innerHTML =
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">' +
+        '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Адмін-панель';
+      link.parentNode.insertBefore(adminLink, link);
+    });
+  }
+
   /* 1) Вставити кнопку «Вийти» після кожного «Кабінет ЗПО» */
   document.querySelectorAll('a[href="/monitoring/login.html"]').forEach((link) => {
     if (link.dataset.logoutAdded) return;
